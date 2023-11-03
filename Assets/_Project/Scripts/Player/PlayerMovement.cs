@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D rb;
     [SerializeField] float movementSpeed;
+    [SerializeField] float rotateSpeed;
 
     void Start()
     {
@@ -22,5 +23,10 @@ public class PlayerMovement : MonoBehaviour
         var playerPosition = new Vector2( PlayerReadInput.horizontalInput, PlayerReadInput.verticalInput);
         rb.AddForce(movementSpeed * Time.deltaTime * playerPosition);
 
+        if(playerPosition != Vector2.zero)
+        {
+        var toRotation = Quaternion.LookRotation(transform.forward, playerPosition);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);
+        }
     }
 }
