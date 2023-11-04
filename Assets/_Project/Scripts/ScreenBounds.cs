@@ -10,6 +10,7 @@ public class ScreenBounds : MonoBehaviour
     float cameraHeight;
     public static BoxCollider2D screenBoxCollider;
     float offset = 0.2f;
+    Vector2 boundsForPlayer;
 
     private void Awake()
     {
@@ -22,17 +23,26 @@ public class ScreenBounds : MonoBehaviour
         screenBoxCollider = GetComponent<BoxCollider2D>(); //Code Reference because public static
         cameraHeight = Camera.main.orthographicSize *  2;
         var boxColliderSize = new Vector2(cameraHeight * Camera.main.aspect, cameraHeight); //Adding a Box collider to the screen border
+
+        boundsForPlayer = boxColliderSize / 2;
         screenBoxCollider.size = boxColliderSize;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         Log("Has Exit the Screen Boundaries");
-        //ExitTriggerEvent?.Invoke();
-        if (other.transform.position.x <= -screenBoxCollider.size.x)
-            Log("Pos triggered");
-            other.transform.position = new Vector2(screenBoxCollider.size.x + offset, transform.position.y);
+        Vector2 newPosition = other.transform.position;
+
+        if (Mathf.Abs(newPosition.x) >= boundsForPlayer.x)
+            newPosition.x = -Mathf.Sign(newPosition.x) * boundsForPlayer.x;
+
+        if (Mathf.Abs(newPosition.y) >= boundsForPlayer.y)
+            newPosition.y = -Mathf.Sign(newPosition.y) * boundsForPlayer.y;
+
+        other.transform.position = newPosition;
+
     }
+
 
     void Log(object message)
     {
