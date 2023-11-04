@@ -1,37 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using System;
 
 public class ScreenBounds : MonoBehaviour
 {
-    //public UnityEvent<Collider2D> ExitTriggerEvent;
+    public Event ExitTriggerEvent;
     
     float cameraHeight;
-    [SerializeField] BoxCollider2D boxCollider;
+    public static BoxCollider2D screenBoxCollider;
+    float offset = 0.2f;
 
     private void Awake()
     {
-        //ExitTriggerEvent.AddListener();
+
+        //ExitTriggerEvent += WrapAround;
     }
 
     void Start()
     {
+        screenBoxCollider = GetComponent<BoxCollider2D>(); //Code Reference because public static
         cameraHeight = Camera.main.orthographicSize *  2;
         var boxColliderSize = new Vector2(cameraHeight * Camera.main.aspect, cameraHeight); //Adding a Box collider to the screen border
-        boxCollider.size = boxColliderSize;
+        screenBoxCollider.size = boxColliderSize;
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        WrapAround();
-        //ExitTriggerEvent?.Invoke(collision);
+        Log("Has Exit the Screen Boundaries");
+        //ExitTriggerEvent?.Invoke();
+        if (other.transform.position.x <= -screenBoxCollider.size.x)
+            Log("Pos triggered");
+            other.transform.position = new Vector2(screenBoxCollider.size.x + offset, transform.position.y);
     }
-    //this is for the player
-    void WrapAround()
+
+    void Log(object message)
     {
-        if(transform.position.x <= -boxCollider.size.x)
-        transform.position = new Vector2(boxCollider.size.x, transform.position.y);
+        Debug.Log(message);
     }
 
 }
