@@ -6,6 +6,7 @@ public class PlayerReadInput : MonoBehaviour
 {
     public static float horizontalInput = 0f;
     public static float verticalInput = 0f;
+    public static bool fire;
 
     void Update()
     {
@@ -16,5 +17,6 @@ public class PlayerReadInput : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+        fire = Input.GetKeyDown(KeyCode.Space);
     }
 }

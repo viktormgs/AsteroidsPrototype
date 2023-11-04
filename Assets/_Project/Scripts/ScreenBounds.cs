@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class ScreenBounds : MonoBehaviour
 {
@@ -30,7 +29,6 @@ public class ScreenBounds : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Log("Has Exit the Screen Boundaries");
         Vector2 newPosition = other.transform.position;
 
         if (Mathf.Abs(newPosition.x) >= boundsForPlayer.x)
@@ -40,13 +38,5 @@ public class ScreenBounds : MonoBehaviour
             newPosition.y = -Mathf.Sign(newPosition.y) * boundsForPlayer.y;
 
         other.transform.position = newPosition;
-
     }
-
-
-    void Log(object message)
-    {
-        Debug.Log(message);
-    }
-
 }
