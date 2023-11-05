@@ -4,18 +4,10 @@ using UnityEngine;
 
 public class ScreenBounds : MonoBehaviour
 {
-    public Event ExitTriggerEvent;
-    
     float cameraHeight;
     public static BoxCollider2D screenBoxCollider;
-    float offset = 0.2f;
     Vector2 boundsForPlayer;
 
-    private void Awake()
-    {
-
-        //ExitTriggerEvent += WrapAround;
-    }
 
     void Start()
     {

@@ -6,11 +6,12 @@ public class PlayerShoot : MonoBehaviour
 {
     [SerializeField] GameObject projectile;
     [SerializeField] float projectileSpeed;
-    [SerializeField] float projectileDuration = 5f;
+    [SerializeField] float projectileLifetime ;
     [SerializeField] int ammoPoolCapacity = 5;
     Rigidbody2D rb;
+    GameObject inUseProjectile;
 
-    Queue<GameObject> ammoQueue = new Queue<GameObject>();
+    Queue<GameObject> ammoQueue = new();
 
     // Start is called before the first frame update
     void Start()
@@ -27,10 +28,6 @@ public class PlayerShoot : MonoBehaviour
     }
     private GameObject GetProjectile()
     {
-        if (ammoQueue.Count == 0)
-        {
-            return null;
-        }
         GameObject pooledProjectile = ammoQueue.Dequeue();
         pooledProjectile.SetActive(true);
         return pooledProjectile;
@@ -42,17 +39,25 @@ public class PlayerShoot : MonoBehaviour
     }
     void Fire()
     {
-        var newProjectile = GetProjectile();
-        rb = newProjectile.GetComponent<Rigidbody2D>();
-        newProjectile.transform.position = gameObject.transform.position;
-        newProjectile.transform.rotation = gameObject.transform.rotation;
-        float startTime = 0f;
-        while(startTime <= projectileDuration)
+        if (ammoQueue.Count != 0)
         {
-            rb.transform.position = projectileSpeed * Time.deltaTime * Vector2.up;
-            startTime += Time.deltaTime/projectileDuration;
+          
+        inUseProjectile = GetProjectile();
+        rb = inUseProjectile.GetComponent<Rigidbody2D>();
+        inUseProjectile.transform.SetPositionAndRotation(gameObject.transform.position, gameObject.transform.rotation); //Set Projectile Pos and Rotation
+
+        rb.velocity = projectileSpeed * Time.deltaTime * transform.up; //Projectile Movement
+
+            //Call Projectile lifetime
+            StartCoroutine(DisableProjectile());
         }
     }
-    
+    IEnumerator DisableProjectile()
+    {
+        yield return new WaitForSeconds(projectileLifetime);
+        inUseProjectile.SetActive(false);
+        ammoQueue.Enqueue(inUseProjectile);
+        yield break;
+    }
 
 }
