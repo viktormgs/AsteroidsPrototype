@@ -10,8 +10,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] int ammoPoolCapacity = 5;
     Rigidbody2D rb;
     GameObject inUseProjectile;
-
-    Queue<GameObject> ammoQueue = new();
+    readonly Queue<GameObject> ammoQueue = new();
 
     // Start is called before the first frame update
     void Start()
@@ -33,13 +32,13 @@ public class PlayerShoot : MonoBehaviour
         return pooledProjectile;
     }
 
-    private void OnMouseDown()
+    private void Update()
     {
         Fire();
     }
     void Fire()
     {
-        if (ammoQueue.Count != 0)
+        if (ammoQueue.Count != 0 && PlayerReadInput.fire)
         {
           
         inUseProjectile = GetProjectile();
@@ -52,6 +51,7 @@ public class PlayerShoot : MonoBehaviour
             StartCoroutine(DisableProjectile(inUseProjectile));
         }
     }
+
     IEnumerator DisableProjectile(GameObject inUseProjectile)
     {
         yield return new WaitForSeconds(projectileLifetime);
