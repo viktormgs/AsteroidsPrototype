@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 969051228007516253}
   - component: {fileID: 969051228007516248}
   - component: {fileID: 248205382}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,7 +128,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 4589747541396666435, guid: b6e89177b6fd90c46bafe8a37d92a19d, type: 3}
-  projectileSpeed: 20
+  projectileSpeed: 400
+  projectileLifetime: 2
   ammoPoolCapacity: 5
 --- !u!50 &969051228007516248
 Rigidbody2D:

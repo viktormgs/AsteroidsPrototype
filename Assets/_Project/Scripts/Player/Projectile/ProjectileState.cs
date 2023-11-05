@@ -5,18 +5,16 @@ using UnityEngine;
 public class ProjectileState : MonoBehaviour
 {
     int screenBoundLayer = 6;
-    readonly bool ignore = true;
-    BoxCollider2D screenCollider = ScreenBounds.screenBoxCollider;
+    int playerLayer = 7;
+    readonly BoxCollider2D screenCollider = ScreenBounds.screenBoxCollider;
 
     private void Start()
     {
-        Physics2D.IgnoreLayerCollision(6, 7, ignore);
-        Physics2D.IgnoreCollision(screenCollider, screenCollider);
+        Physics2D.IgnoreLayerCollision(screenBoundLayer, playerLayer, true);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         gameObject.SetActive(false);
-        other.gameObject.SetActive(false);
     }
 }
