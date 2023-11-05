@@ -6,7 +6,7 @@ public class ScreenBounds : MonoBehaviour
 {
     float cameraHeight;
     public static BoxCollider2D screenBoxCollider;
-    Vector2 boundsForPlayer;
+    public static Vector2 bounds;
 
 
     void Start()
@@ -15,7 +15,7 @@ public class ScreenBounds : MonoBehaviour
         cameraHeight = Camera.main.orthographicSize *  2;
         var boxColliderSize = new Vector2(cameraHeight * Camera.main.aspect, cameraHeight); //Adding a Box collider to the screen border
 
-        boundsForPlayer = boxColliderSize / 2;
+        bounds = boxColliderSize / 2;
         screenBoxCollider.size = boxColliderSize;
     }
 
@@ -23,11 +23,11 @@ public class ScreenBounds : MonoBehaviour
     {
         Vector2 newPosition = other.transform.position;
 
-        if (Mathf.Abs(newPosition.x) >= boundsForPlayer.x)
-            newPosition.x = -Mathf.Sign(newPosition.x) * boundsForPlayer.x;
+        if (Mathf.Abs(newPosition.x) >= bounds.x)
+            newPosition.x = -Mathf.Sign(newPosition.x) * bounds.x;
 
-        if (Mathf.Abs(newPosition.y) >= boundsForPlayer.y)
-            newPosition.y = -Mathf.Sign(newPosition.y) * boundsForPlayer.y;
+        if (Mathf.Abs(newPosition.y) >= bounds.y)
+            newPosition.y = -Mathf.Sign(newPosition.y) * bounds.y;
 
         other.transform.position = newPosition;
     }
