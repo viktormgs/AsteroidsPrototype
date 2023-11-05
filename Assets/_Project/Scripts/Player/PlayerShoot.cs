@@ -49,10 +49,10 @@ public class PlayerShoot : MonoBehaviour
         rb.velocity = projectileSpeed * Time.deltaTime * transform.up; //Projectile Movement
 
             //Call Projectile lifetime
-            StartCoroutine(DisableProjectile());
+            StartCoroutine(DisableProjectile(inUseProjectile));
         }
     }
-    IEnumerator DisableProjectile()
+    IEnumerator DisableProjectile(GameObject inUseProjectile)
     {
         yield return new WaitForSeconds(projectileLifetime);
         inUseProjectile.SetActive(false);
