@@ -8,7 +8,7 @@ public class EnemySpawner : MonoBehaviour
     int enemyPoolSize = 20;
     Queue<GameObject> enemyQueue = new();
     GameObject inUseEnemy;
-    float speed;
+    float speed = 1f;
 
     float cameraHalfHeight;
     float spawnInterval = 2f;
@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
             enemyToPool.SetActive(false);
             enemyQueue.Enqueue(enemyToPool);
         }
-
+        StartCoroutine(Spawner());
     }
     private GameObject GetEnemy()
     {
@@ -41,11 +41,12 @@ public class EnemySpawner : MonoBehaviour
         while (true)
         {
             Vector2 spawnPos = GetRandomPos();
-
             Vector2 direction = (Vector2.zero - spawnPos).normalized; //Calculate direction to center
-
+            Vector2 toCenter = Vector2.MoveTowards(spawnPos, Vector2.zero, speed * Time.deltaTime);
+            
             inUseEnemy = GetEnemy();
-            inUseEnemy.GetComponent<Rigidbody2D>().velocity = direction * speed * Time.deltaTime;
+            inUseEnemy.transform.position = spawnPos;
+            inUseEnemy.GetComponent<Rigidbody2D>().velocity = toCenter;
 
 
 
@@ -65,9 +66,9 @@ public class EnemySpawner : MonoBehaviour
             case 0: return new Vector2(Random.Range(-ScreenBounds.bounds.x, ScreenBounds.bounds.x), cameraHalfHeight);
             //Bottom
             case 1: return new Vector2(Random.Range(-ScreenBounds.bounds.x, ScreenBounds.bounds.x), -cameraHalfHeight);
-            //Right
-            case 2: return new Vector2(-ScreenBounds.bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight));
             //Left
+            case 2: return new Vector2(-ScreenBounds.bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight));
+            //Right
             default: return new Vector2(ScreenBounds.bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight));
         }
     }

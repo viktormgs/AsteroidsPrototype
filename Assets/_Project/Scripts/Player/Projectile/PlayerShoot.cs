@@ -6,10 +6,12 @@ public class PlayerShoot : MonoBehaviour
 {
     [SerializeField] GameObject projectile;
     [SerializeField] float projectileSpeed;
-    [SerializeField] float projectileLifetime ;
-    [SerializeField] int ammoPoolCapacity = 5;
+    [SerializeField] float projectileLifetime;
+    [SerializeField] int ammoPoolCapacity;
     Rigidbody2D rb;
     GameObject inUseProjectile;
+    bool canShoot = true;
+    [SerializeField] float attackSpeed;
     readonly Queue<GameObject> ammoQueue = new();
 
     // Start is called before the first frame update
@@ -38,14 +40,14 @@ public class PlayerShoot : MonoBehaviour
     }
     void Fire()
     {
-        if (ammoQueue.Count != 0 && PlayerReadInput.fire)
+        if (ammoQueue.Count != 0 && PlayerReadInput.fire && canShoot)
         {
-          
-        inUseProjectile = GetProjectile();
-        rb = inUseProjectile.GetComponent<Rigidbody2D>();
-        inUseProjectile.transform.SetPositionAndRotation(gameObject.transform.position, gameObject.transform.rotation); //Set Projectile Pos and Rotation
+            StartCoroutine(AttackSpeed());
+            inUseProjectile = GetProjectile();
+            rb = inUseProjectile.GetComponent<Rigidbody2D>();
+            inUseProjectile.transform.SetPositionAndRotation(gameObject.transform.position, gameObject.transform.rotation); //Set Projectile Pos and Rotation
 
-        rb.velocity = projectileSpeed * Time.deltaTime * transform.up; //Projectile Movement
+            rb.velocity = projectileSpeed * Time.deltaTime * transform.up; //Projectile Movement
 
             //Call Projectile lifetime
             StartCoroutine(DisableProjectile(inUseProjectile));
@@ -60,4 +62,11 @@ public class PlayerShoot : MonoBehaviour
         yield break;
     }
 
+    IEnumerator AttackSpeed()
+    {
+        canShoot = false;
+        yield return new WaitForSeconds(attackSpeed);
+        canShoot = true;
+        yield break;
+    }
 }

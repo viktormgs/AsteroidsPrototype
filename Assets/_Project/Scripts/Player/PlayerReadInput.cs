@@ -17,6 +17,6 @@ public class PlayerReadInput : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        fire = Input.GetKeyDown(KeyCode.Space);
+        fire = Input.GetKey(KeyCode.Space);
     }
 }
