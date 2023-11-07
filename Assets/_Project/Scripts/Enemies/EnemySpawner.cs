@@ -48,8 +48,6 @@ public class EnemySpawner : MonoBehaviour
             inUseEnemy.transform.position = spawnPos;
             inUseEnemy.GetComponent<Rigidbody2D>().velocity = toCenter;
 
-
-
             yield return new WaitForSeconds(spawnInterval);
         }
 

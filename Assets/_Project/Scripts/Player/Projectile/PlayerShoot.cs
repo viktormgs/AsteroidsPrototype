@@ -17,8 +17,6 @@ public class PlayerShoot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = projectile.GetComponent<Rigidbody2D>();
-
         for (int i = 0; i < ammoPoolCapacity; i++)
         {
             GameObject pooledProjectile = Instantiate(projectile);
