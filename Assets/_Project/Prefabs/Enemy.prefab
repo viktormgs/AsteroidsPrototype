@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8657272184608112875}
   m_Layer: 7
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49f55d3c0945b54298aec9beffe2619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomSpeed: 400
 --- !u!50 &6609197317097569289
 Rigidbody2D:
   serializedVersion: 4

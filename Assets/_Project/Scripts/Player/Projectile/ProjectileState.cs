@@ -15,6 +15,11 @@ public class ProjectileState : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        gameObject.SetActive(false);
+        if (other.CompareTag("Enemy"))
+        {
+            gameObject.SetActive(false);
+            other.gameObject.SetActive(false);
+        }
+
     }
 }

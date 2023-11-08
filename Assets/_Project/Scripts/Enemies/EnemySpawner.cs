@@ -13,7 +13,6 @@ public class EnemySpawner : MonoBehaviour
     float cameraHalfHeight;
     float spawnInterval = 2f;
 
-
     void Start()
     {
         cameraHalfHeight = Camera.main.orthographicSize;
@@ -25,6 +24,7 @@ public class EnemySpawner : MonoBehaviour
         }
         StartCoroutine(Spawner());
     }
+
     private GameObject GetEnemy()
     {
         if (enemyQueue.Count == 0)
@@ -38,7 +38,6 @@ public class EnemySpawner : MonoBehaviour
             pooledEnemy.SetActive(true);
             return pooledEnemy;
         }
-
     }
 
     IEnumerator Spawner()
@@ -55,8 +54,6 @@ public class EnemySpawner : MonoBehaviour
 
             yield return new WaitForSeconds(spawnInterval);
         }
-
-
     }
 
     private Vector2 GetRandomPos()
@@ -75,5 +72,4 @@ public class EnemySpawner : MonoBehaviour
             default: return new Vector2(ScreenBounds.bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight));
         }
     }
-
 }
