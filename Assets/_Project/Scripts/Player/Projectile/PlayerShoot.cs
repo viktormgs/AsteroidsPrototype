@@ -36,6 +36,7 @@ public class PlayerShoot : MonoBehaviour
     {
         Fire();
     }
+
     void Fire()
     {
         if (ammoQueue.Count != 0 && PlayerReadInput.fire && canShoot)
@@ -48,15 +49,14 @@ public class PlayerShoot : MonoBehaviour
             rb.velocity = projectileSpeed * Time.deltaTime * transform.up; //Projectile Movement
 
             //Call Projectile lifetime
-            StartCoroutine(DisableProjectile(inUseProjectile));
+            StartCoroutine(ProjectileLifetime(inUseProjectile));
         }
     }
 
-    IEnumerator DisableProjectile(GameObject inUseProjectile)
+    IEnumerator ProjectileLifetime(GameObject inUseProjectile)
     {
         yield return new WaitForSeconds(projectileLifetime);
-        inUseProjectile.SetActive(false);
-        ammoQueue.Enqueue(inUseProjectile);
+        DisableProjectile(inUseProjectile);
         yield break;
     }
 
@@ -66,5 +66,11 @@ public class PlayerShoot : MonoBehaviour
         yield return new WaitForSeconds(attackSpeed);
         canShoot = true;
         yield break;
+    }
+
+    public void DisableProjectile(GameObject inUseProjectile)
+    {
+        inUseProjectile.SetActive(false);
+        ammoQueue.Enqueue(inUseProjectile);
     }
 }

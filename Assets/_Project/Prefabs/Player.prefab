@@ -130,7 +130,8 @@ MonoBehaviour:
   projectile: {fileID: 4589747541396666435, guid: b6e89177b6fd90c46bafe8a37d92a19d, type: 3}
   projectileSpeed: 400
   projectileLifetime: 2
-  ammoPoolCapacity: 5
+  ammoPoolCapacity: 7
+  attackSpeed: 0.1
 --- !u!50 &969051228007516248
 Rigidbody2D:
   serializedVersion: 4
