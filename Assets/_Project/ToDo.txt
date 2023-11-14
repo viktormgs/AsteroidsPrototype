@@ -5,6 +5,7 @@ Game Manager
 Screens
 Main Menu
 
-player collision
-projectile collision
+player collision with enemies
+projectile collision with enemies
 
+V-Screenbounds independent sides
