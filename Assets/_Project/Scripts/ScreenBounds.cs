@@ -10,12 +10,9 @@ public class ScreenBounds : MonoBehaviour
 
     void Start()
     {
-        //screenBoxCollider = GetComponent<BoxCollider2D>(); //Referenced here because public static
         cameraHeight = Camera.main.orthographicSize *  2;
-        var boxColliderSize = new Vector2(cameraHeight * Camera.main.aspect, cameraHeight); //Adding a Box collider to the screen border
-
+        var boxColliderSize = new Vector2(cameraHeight * Camera.main.aspect, cameraHeight); //Storing full screen device size into var
         bounds = boxColliderSize / 2;
-        //screenBoxCollider.size = boxColliderSize;
 
         GameObject wall_left = CreateBoundary("wall_left");
         GameObject wall_top = CreateBoundary("wall_top");
@@ -43,19 +40,4 @@ public class ScreenBounds : MonoBehaviour
         wallBound.transform.localScale = new Vector2(scaleX, scaleY);
         wallBound.transform.position = new Vector2(posX, posY);
     }
-
-
-
-    //private void OnTriggerExit2D(Collider2D other)
-    //{
-    //    Vector2 newPosition = other.transform.position;
-
-    //    if (Mathf.Abs(newPosition.x) >= bounds.x)
-    //        newPosition.x = -Mathf.Sign(newPosition.x) * bounds.x;
-
-    //    if (Mathf.Abs(newPosition.y) >= bounds.y)
-    //        newPosition.y = -Mathf.Sign(newPosition.y) * bounds.y;
-
-    //    other.transform.position = newPosition;
-    //}
 }

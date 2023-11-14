@@ -22,25 +22,10 @@ public class EnemySpawner : MonoBehaviour
             enemyToPool.SetActive(false);
             enemyQueue.Enqueue(enemyToPool);
         }
-        StartCoroutine(Spawner());
+        StartCoroutine(Spawner()); //This is the core
     }
 
-    private GameObject GetEnemy()
-    {
-        if (enemyQueue.Count == 0)
-        {
-            enemyQueue.Enqueue(enemy);
-            return enemy;
-        }
-        else
-        {
-            GameObject pooledEnemy = enemyQueue.Dequeue();
-            pooledEnemy.SetActive(true);
-            return pooledEnemy;
-        }
-    }
-
-    IEnumerator Spawner()
+    IEnumerator Spawner() //Is Coroutine because of being able to add a delay time between spawns
     {
         while (true)
         {
@@ -52,6 +37,23 @@ public class EnemySpawner : MonoBehaviour
             inUseEnemy.GetComponent<Rigidbody2D>().velocity = toCenter;
 
             yield return new WaitForSeconds(spawnInterval);
+        }
+    }
+
+    private GameObject GetEnemy()
+    {
+        if (enemyQueue.Count == 0)
+        {
+            GameObject newEnemyToPool = Instantiate(enemy);
+            newEnemyToPool.SetActive(false);
+            enemyQueue.Enqueue(newEnemyToPool);
+            return newEnemyToPool;
+        }
+        else
+        {
+            GameObject pooledEnemy = enemyQueue.Dequeue();
+            pooledEnemy.SetActive(true);
+            return pooledEnemy;
         }
     }
 

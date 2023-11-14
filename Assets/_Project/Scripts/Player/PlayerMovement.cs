@@ -8,16 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float movementSpeed;
     [SerializeField] float rotateSpeed;
 
-    void Start()
-    {
-        rb = gameObject.GetComponent<Rigidbody2D>();
-    }
-
-    void FixedUpdate()
-    {
-        Movement();
-    }
-
+    void Start() => rb = gameObject.GetComponent<Rigidbody2D>();
+    void FixedUpdate() => Movement();
     void Movement()
     {
         var playerPosition = new Vector2( PlayerReadInput.horizontalInput, PlayerReadInput.verticalInput);
