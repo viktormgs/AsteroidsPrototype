@@ -10,12 +10,12 @@ public class ProjectileState : MonoBehaviour
 
     private void Start()
     {
-        Physics2D.IgnoreLayerCollision(screenBoundLayer, projectilesLayer, true);
+        //Physics2D.IgnoreLayerCollision(screenBoundLayer, projectilesLayer, true);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy")) //destroy asteroids
         {
             gameObject.SetActive(false);
             other.gameObject.SetActive(false);

@@ -1,0 +1,10 @@
+Lives Sytem
+
+Game Manager
+
+Screens
+Main Menu
+
+player collision
+projectile collision
+

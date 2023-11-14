@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyState : MonoBehaviour
 {
-    
     [SerializeField] float randomSpeed;
     int randomOrientation;
     Vector3 randomRotation = new();

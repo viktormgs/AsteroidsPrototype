@@ -45,7 +45,6 @@ public class EnemySpawner : MonoBehaviour
         while (true)
         {
             Vector2 spawnPos = GetRandomPos();
-            Vector2 direction = (Vector2.zero - spawnPos).normalized; //Calculate direction to center
             Vector2 toCenter = Vector2.MoveTowards(spawnPos, Vector2.zero, speed * Time.deltaTime);
 
             inUseEnemy = GetEnemy();
