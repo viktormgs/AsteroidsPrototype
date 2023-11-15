@@ -28,7 +28,7 @@ public class ScreenBounds : MonoBehaviour
 
     GameObject CreateBoundary(string name)
     {
-        GameObject boundary = new GameObject(name);
+        GameObject boundary = new(name);
         boundary.AddComponent<BoxCollider2D>();
         boundary.AddComponent<BoundaryTrigger>();
         return boundary;

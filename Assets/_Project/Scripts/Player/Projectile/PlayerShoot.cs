@@ -27,24 +27,32 @@ public class PlayerShoot : MonoBehaviour
     }
     private GameObject GetProjectile()
     {
+        if (ammoQueue.Count == 0)
+        {
+            GameObject newPooledProjectile = Instantiate(projectile);
+            newPooledProjectile.SetActive(false);
+            ammoQueue.Enqueue(newPooledProjectile);
+            return newPooledProjectile;
+        }
+
         GameObject pooledProjectile = ammoQueue.Dequeue();
         pooledProjectile.SetActive(true);
+
         return pooledProjectile;
     }
 
-    private void Update()
-    {
-        Fire();
-    }
+    private void Update() => Fire();
 
     void Fire()
     {
-        if (ammoQueue.Count != 0 && PlayerReadInput.fire && canShoot)
+        if (PlayerReadInput.fire && canShoot)
         {
             StartCoroutine(AttackSpeed());
             inUseProjectile = GetProjectile();
             rb = inUseProjectile.GetComponent<Rigidbody2D>();
-            inUseProjectile.transform.SetPositionAndRotation(gameObject.transform.position, gameObject.transform.rotation); //Set Projectile Pos and Rotation
+
+            //Set Projectile Pos and Rotation
+            inUseProjectile.transform.SetPositionAndRotation(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0), gameObject.transform.rotation); 
 
             rb.velocity = projectileSpeed * Time.deltaTime * transform.up; //Projectile Movement
 

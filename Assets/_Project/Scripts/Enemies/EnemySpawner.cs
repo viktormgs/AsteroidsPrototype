@@ -5,13 +5,13 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] GameObject enemy;
-    readonly int enemyPoolSize = 20;
-    Queue<GameObject> enemyQueue = new();
+    readonly int enemyPoolSize = 3;
+    public static readonly Queue<GameObject> enemyQueue = new();
     GameObject inUseEnemy;
-    float speed = 1f;
-
     float cameraHalfHeight;
-    float spawnInterval = 2f;
+
+    readonly float spawnInterval = 2f; //this should be on a scriptable object
+    readonly float speed = 1f; //this should be on a scriptable object
 
     void Start()
     {
@@ -47,30 +47,27 @@ public class EnemySpawner : MonoBehaviour
             GameObject newEnemyToPool = Instantiate(enemy);
             newEnemyToPool.SetActive(false);
             enemyQueue.Enqueue(newEnemyToPool);
-            return newEnemyToPool;
         }
-        else
-        {
-            GameObject pooledEnemy = enemyQueue.Dequeue();
-            pooledEnemy.SetActive(true);
-            return pooledEnemy;
-        }
+
+        GameObject pooledEnemy = enemyQueue.Dequeue();
+        pooledEnemy.SetActive(true);
+        return pooledEnemy;
     }
 
     private Vector2 GetRandomPos()
     {
         int side = Random.Range(0, 4);
 
-        switch (side)
+        return side switch
         {
             //top
-            case 0: return new Vector2(Random.Range(-ScreenBounds.bounds.x, ScreenBounds.bounds.x), cameraHalfHeight);
+            0 => new Vector2(Random.Range(-ScreenBounds.bounds.x, ScreenBounds.bounds.x), cameraHalfHeight),
             //Bottom
-            case 1: return new Vector2(Random.Range(-ScreenBounds.bounds.x, ScreenBounds.bounds.x), -cameraHalfHeight);
+            1 => new Vector2(Random.Range(-ScreenBounds.bounds.x, ScreenBounds.bounds.x), -cameraHalfHeight),
             //Left
-            case 2: return new Vector2(-ScreenBounds.bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight));
+            2 => new Vector2(-ScreenBounds.bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
             //Right
-            default: return new Vector2(ScreenBounds.bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight));
-        }
+            _ => new Vector2(ScreenBounds.bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
+        };
     }
 }

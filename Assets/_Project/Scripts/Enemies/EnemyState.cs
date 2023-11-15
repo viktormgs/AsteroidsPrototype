@@ -18,4 +18,10 @@ public class EnemyState : MonoBehaviour
     void FixedUpdate() => Rotation();
 
     void Rotation() => transform.Rotate(randomRotation, randomSpeed * Time.deltaTime);
+
+    public void DestroyEnemy()
+    {
+        gameObject.SetActive(false);
+        EnemySpawner.enemyQueue.Enqueue(gameObject);
+    }
 }

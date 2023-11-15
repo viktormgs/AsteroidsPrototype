@@ -144,7 +144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 969051228007516250, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 969051228007516250, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -173,6 +173,18 @@ PrefabInstance:
     - target: {fileID: 969051228007516250, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 969051228007516253, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
+      propertyPath: attackSpeed
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 969051228007516253, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
+      propertyPath: projectileSpeed
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 969051228007516253, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
+      propertyPath: projectileLifetime
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 969051228007516254, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: m_Name
