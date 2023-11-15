@@ -1,11 +1,14 @@
 Lives Sytem
-
-Game Manager
+Score System
+Game Manager Events for scoring and lives
 
 Screens
-Main Menu
+-Main Menu
 
 player collision with enemies
 projectile collision with enemies
+
+enemies vary size, rotation and speed
+enemies split into two and other two when hit
 
 V-Screenbounds independent sides
