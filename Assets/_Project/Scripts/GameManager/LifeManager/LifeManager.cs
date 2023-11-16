@@ -7,4 +7,8 @@ public class LifeManager : MonoBehaviour
     public static Event LifeEvent;
 
 
+
+
+
+
 }

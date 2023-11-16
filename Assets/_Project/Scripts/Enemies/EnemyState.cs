@@ -11,7 +11,7 @@ public class EnemyState : MonoBehaviour
     private void Start()
     {
         randomSpeed = Random.Range(0, randomSpeed);
-        randomOrientation = Random.Range(0, 1) * 2 - 1; 
+        randomOrientation = Random.Range(0, 1) * 2 - 1; //Gives -1 or 1
         randomRotation = new Vector3(0, 0, randomOrientation);
     }
 
