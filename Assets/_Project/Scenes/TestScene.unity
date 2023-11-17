@@ -123,24 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1363626221 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7023746784486419897, guid: a18c2d0b589496f45987bac7fce1bee3, type: 3}
-  m_PrefabInstance: {fileID: 1477986818125496758}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1363626222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1363626221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9abdd7a63f4285445aa5777ce1540598, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyLvlArray: []
 --- !u!1001 &969051227978558519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -198,7 +180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 969051228007516253, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: projectileSpeed
-      value: 300
+      value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 969051228007516253, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: projectileLifetime
@@ -263,7 +245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7023746784486419897, guid: a18c2d0b589496f45987bac7fce1bee3, type: 3}
       propertyPath: m_Name
-      value: EnemySpawner
+      value: EnemyManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a18c2d0b589496f45987bac7fce1bee3, type: 3}

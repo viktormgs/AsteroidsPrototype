@@ -11,4 +11,6 @@ projectile collision with enemies
 enemies vary size, rotation and speed
 enemies split into two and other two when hit
 
+spawninterval into the scriptable object
+
 V-Screenbounds independent sides

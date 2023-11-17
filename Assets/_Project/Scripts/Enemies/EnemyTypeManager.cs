@@ -5,23 +5,38 @@ using UnityEngine;
 public class EnemyTypeManager : MonoBehaviour
 {
     [SerializeField] EnemyStats[] enemyLvlArray;
+    public static EnemyStats currentEnemyLvl;
+    int lvlIndex;
+    [SerializeField] float timeForNextLevel;
     //Dictionary<string, EnemyStats> enemyDictionary = new();
 
-    //void Start()
-    //{
-    //    foreach (EnemyStats enemyLvl in enemyTypes)
-    //    {
-    //        enemyDictionary.Add(enemyLvl.name, enemyLvl);
-    //        Debug.Log(enemyLvl.name.ToString());
-    //    }
-    //}
 
-
-
-
-    public ScriptableObject CurrentEnemyLvl(int lvl)
+    void Start()
     {
-        return enemyLvlArray[lvl];
+        StartCoroutine(LevelUpEnemyType());
+
+        //foreach (EnemyStats enemyLvl in enemyTypes)
+        //{
+        //    enemyDictionary.Add(enemyLvl.name, enemyLvl);
+        //    Debug.Log(enemyLvl.name.ToString());
+        //}
+    }
+
+    IEnumerator LevelUpEnemyType()
+    {
+        lvlIndex = 0;
+
+        while (lvlIndex < enemyLvlArray.Length)
+        {
+            CurrentEnemyLvl(lvlIndex);
+            yield return new WaitForSeconds(timeForNextLevel);
+            lvlIndex++;
+        }
+    }
+
+    public EnemyStats CurrentEnemyLvl(int lvl)
+    {
+        return currentEnemyLvl = enemyLvlArray[lvl];
     }
 
 }

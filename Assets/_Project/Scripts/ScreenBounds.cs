@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class ScreenBounds : MonoBehaviour
 {
+    public static float cameraHalfHeight;
     float cameraHeight;
     public static BoxCollider2D screenBoxCollider;
     public static Vector2 bounds;
 
     void Start()
     {
+        
+        cameraHalfHeight = Camera.main.orthographicSize;
         cameraHeight = Camera.main.orthographicSize *  2;
         var boxColliderSize = new Vector2(cameraHeight * Camera.main.aspect, cameraHeight); //Storing full screen device size into var
         bounds = boxColliderSize / 2;
+
 
         GameObject wall_left = CreateBoundary("wall_left");
         GameObject wall_top = CreateBoundary("wall_top");
@@ -20,10 +24,11 @@ public class ScreenBounds : MonoBehaviour
         GameObject wall_bottom = CreateBoundary("wall_bottom");
 
         float offset = 1f;
-        ScreenBoundPlacer(wall_left, -bounds.x - offset, transform.position.y, transform.localScale.x, boxColliderSize.y);
-        ScreenBoundPlacer(wall_right, bounds.x + offset, transform.position.y, transform.localScale.x, boxColliderSize.y);
-        ScreenBoundPlacer(wall_top, transform.position.x, bounds.y + offset, boxColliderSize.x, transform.localScale.y);
-        ScreenBoundPlacer(wall_bottom, transform.position.x, -bounds.y - offset, boxColliderSize.x, transform.localScale.y);
+        float scaleOffset = 1.07f;
+        ScreenBoundPlacer(wall_left, -bounds.x - offset, transform.position.y, transform.localScale.x, boxColliderSize.y * scaleOffset);
+        ScreenBoundPlacer(wall_right, bounds.x + offset, transform.position.y, transform.localScale.x, boxColliderSize.y * scaleOffset);
+        ScreenBoundPlacer(wall_top, transform.position.x, bounds.y + offset, boxColliderSize.x * scaleOffset, transform.localScale.y);
+        ScreenBoundPlacer(wall_bottom, transform.position.x, -bounds.y - offset, boxColliderSize.x * scaleOffset, transform.localScale.y);
     }
 
     GameObject CreateBoundary(string name)

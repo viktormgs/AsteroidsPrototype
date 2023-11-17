@@ -4,20 +4,41 @@ using UnityEngine;
 
 public class EnemyState : MonoBehaviour
 {
-    [SerializeField] float randomSpeed;
+    int randomSpeed;
     int randomOrientation;
     Vector3 randomRotation = new();
+    int rotationSpeed;
+    Rigidbody2D rb;
+
+    Vector2 toCenter;
 
     private void Start()
     {
-        randomSpeed = Random.Range(0, randomSpeed);
-        randomOrientation = Random.Range(0, 1) * 2 - 1; //Gives -1 or 1
+        rb = GetComponent<Rigidbody2D>();
+        var currentEnemyLvl = EnemyTypeManager.currentEnemyLvl;
+
+        //Speed for Movement
+        randomSpeed = Random.Range(currentEnemyLvl.minSpeed, currentEnemyLvl.maxSpeed);
+
+        //Gives -1 or 1
+        randomOrientation = Random.Range(0, 1) * 2 - 1; 
         randomRotation = new Vector3(0, 0, randomOrientation);
+        rotationSpeed = Random.Range(0, 400);
     }
 
-    void FixedUpdate() => Rotation();
+    void FixedUpdate()
+    {
+        Movement();
+        Rotation();
+    }
 
-    void Rotation() => transform.Rotate(randomRotation, randomSpeed * Time.deltaTime);
+    void Movement()
+    {
+        toCenter = Vector2.MoveTowards(transform.position, Vector2.zero, randomSpeed * Time.deltaTime);
+        rb.velocity = toCenter; //new Vector2(0, transform.localPosition.y * randomSpeed) * Time.deltaTime;
+    }
+
+    void Rotation() => transform.Rotate(randomRotation, rotationSpeed * Time.deltaTime);
 
     public void DestroyEnemy()
     {

@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2851654904515057230}
   - component: {fileID: 5670010203295070068}
+  - component: {fileID: 1363626222}
   m_Layer: 0
-  m_Name: EnemySpawner
+  m_Name: EnemyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,3 +46,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 7089528742566300567, guid: ff3900dd8874aa949bf0aa9e7c08372f, type: 3}
+--- !u!114 &1363626222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7023746784486419897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9abdd7a63f4285445aa5777ce1540598, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyLvlArray:
+  - {fileID: 11400000, guid: f8b27571778dd304a87f9c94fe57edfd, type: 2}
+  - {fileID: 11400000, guid: 1563b9f5b8fc5674eb632d74bb2a1ce8, type: 2}
+  - {fileID: 11400000, guid: 464746397a7443e4ba247f4e1f4ea0ab, type: 2}
+  - {fileID: 11400000, guid: e8dc44ff363c0f042b4ca3a9ea13cd1e, type: 2}
+  timeForNextLevel: 3

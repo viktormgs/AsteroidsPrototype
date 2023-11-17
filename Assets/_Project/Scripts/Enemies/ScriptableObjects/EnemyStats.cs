@@ -5,8 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyStatsLvlx", menuName = "ScriptableObjects/EnemyStats")]
 public class EnemyStats : ScriptableObject
 {
-    public float minSpeed;
-    public float maxSpeed;
+    public int minSpeed;
+    public int maxSpeed;
     public float minScale;
     public float maxScale;
+    public float spawnInterval;
 }
