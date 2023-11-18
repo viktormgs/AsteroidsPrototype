@@ -10,13 +10,13 @@ public class EnemySpawner : MonoBehaviour
     GameObject inUseEnemy;
 
     float cameraHalfHeight;
-    Vector2 bounds;
+    Vector2 screenLimit;
 
     readonly float spawnInterval = 2f; //this should be on a scriptable object
 
     void Start()
     {
-        bounds = ScreenBounds.bounds;
+        screenLimit = ScreenBounds.screenLimit;
         cameraHalfHeight = ScreenBounds.cameraHalfHeight;
 
         //Pool Creation
@@ -65,13 +65,13 @@ public class EnemySpawner : MonoBehaviour
         return side switch
         {
             //top
-            0 => new Vector2(Random.Range(-bounds.x, bounds.x), cameraHalfHeight),
+            0 => new Vector2(Random.Range(-screenLimit.x, screenLimit.x), cameraHalfHeight),
             //Bottom
-            1 => new Vector2(Random.Range(-bounds.x, bounds.x), -cameraHalfHeight),
+            1 => new Vector2(Random.Range(-screenLimit.x, screenLimit.x), -cameraHalfHeight),
             //Left
-            2 => new Vector2(-bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
+            2 => new Vector2(-screenLimit.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
             //Right
-            _ => new Vector2(bounds.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
+            _ => new Vector2(screenLimit.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
         };
     }
 }

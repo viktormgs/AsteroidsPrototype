@@ -10,7 +10,7 @@ public class EnemyState : MonoBehaviour
     int rotationSpeed;
     Rigidbody2D rb;
 
-    Vector2 toCenter;
+    Vector2 directionToCenter;
 
     private void Start()
     {
@@ -23,7 +23,8 @@ public class EnemyState : MonoBehaviour
         //Gives -1 or 1
         randomOrientation = Random.Range(0, 1) * 2 - 1; 
         randomRotation = new Vector3(0, 0, randomOrientation);
-        rotationSpeed = Random.Range(0, 400);
+        rotationSpeed = Random.Range(0, 500);
+        directionToCenter = (Vector2.zero - (Vector2)transform.position).normalized;
     }
 
     void FixedUpdate()
@@ -32,11 +33,7 @@ public class EnemyState : MonoBehaviour
         Rotation();
     }
 
-    void Movement()
-    {
-        toCenter = Vector2.MoveTowards(transform.position, Vector2.zero, randomSpeed * Time.deltaTime);
-        rb.velocity = toCenter; //new Vector2(0, transform.localPosition.y * randomSpeed) * Time.deltaTime;
-    }
+    void Movement()=> rb.velocity = randomSpeed * Time.deltaTime * directionToCenter;
 
     void Rotation() => transform.Rotate(randomRotation, rotationSpeed * Time.deltaTime);
 
