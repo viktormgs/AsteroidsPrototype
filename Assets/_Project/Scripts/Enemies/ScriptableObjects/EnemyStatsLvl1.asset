@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd291aa4253f51c4e91e25bd789f7b15, type: 3}
   m_Name: EnemyStatsLvl1
   m_EditorClassIdentifier: 
-  minSpeed: 100
+  minSpeed: 50
   maxSpeed: 200
-  minScale: 2
-  maxScale: 4
+  minScale: 3
+  maxScale: 5
   spawnInterval: 0

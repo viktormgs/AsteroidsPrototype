@@ -6,11 +6,6 @@ public class BoundaryTrigger : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log(other.name.ToString() + " has collided with " + gameObject.name.ToString());
-            Debug.Log("player position: " + other.transform.position.ToString() + " and screenLimit: " + ScreenBounds.screenLimit.ToString());
-        }
 
         Vector2 newPosition = other.transform.position;
 

@@ -9,6 +9,7 @@ public class ScreenBounds : MonoBehaviour
     public static BoxCollider2D screenBoxCollider;
     public static Vector2 screenLimit;
     public static Vector2 bounds;
+    [SerializeField] Vector2 offset; //Adjust screen boundaries here
 
     void Start()
     {
@@ -23,7 +24,7 @@ public class ScreenBounds : MonoBehaviour
         GameObject wall_right = CreateBoundary("wall_right");
         GameObject wall_bottom = CreateBoundary("wall_bottom");
 
-        Vector2 offset = Vector2.one;  // Adjust screen boundaries here
+        
         bounds = screenLimit + offset; //Also related to BoundaryTrigger.cs
         float scaleOffset = 1.15f;
         float width = .5f;

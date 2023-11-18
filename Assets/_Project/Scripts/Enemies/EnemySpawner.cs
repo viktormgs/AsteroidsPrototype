@@ -12,35 +12,30 @@ public class EnemySpawner : MonoBehaviour
     float cameraHalfHeight;
     Vector2 screenLimit;
 
-    readonly float spawnInterval = 2f; //this should be on a scriptable object
-
     void Start()
     {
         screenLimit = ScreenBounds.screenLimit;
         cameraHalfHeight = ScreenBounds.cameraHalfHeight;
 
-        //Pool Creation
         for (int i = 0; i < enemyPoolSize; i++)
         {
             GameObject enemyToPool = Instantiate(enemy);
             enemyToPool.SetActive(false);
             enemyQueue.Enqueue(enemyToPool);
         }
-        StartCoroutine(Spawner()); //This is the core
+        StartCoroutine(Spawner());
     }
 
-    IEnumerator Spawner() //Is Coroutine because of being able to add a delay time between spawns
+    IEnumerator Spawner() //Is Coroutine because can use spawnInterval as time delay
     {
         while (true)
         {
             Vector2 spawnPos = GetRandomPos();
-            //Vector2 toCenter = Vector2.MoveTowards(spawnPos, Vector2.zero, speed * Time.deltaTime);
 
             inUseEnemy = GetEnemy();
             inUseEnemy.transform.position = spawnPos;
-            //inUseEnemy.GetComponent<Rigidbody2D>().velocity = toCenter;
 
-            yield return new WaitForSeconds(spawnInterval);
+            yield return new WaitForSeconds(EnemyTypeManager.currentEnemyLvl.spawnInterval);
         }
     }
 

@@ -8,19 +8,8 @@ public class EnemyTypeManager : MonoBehaviour
     public static EnemyStats currentEnemyLvl;
     int lvlIndex;
     [SerializeField] float timeForNextLevel;
-    //Dictionary<string, EnemyStats> enemyDictionary = new();
 
-
-    void Start()
-    {
-        StartCoroutine(LevelUpEnemyType());
-
-        //foreach (EnemyStats enemyLvl in enemyTypes)
-        //{
-        //    enemyDictionary.Add(enemyLvl.name, enemyLvl);
-        //    Debug.Log(enemyLvl.name.ToString());
-        //}
-    }
+    void Start() => StartCoroutine(LevelUpEnemyType());
 
     IEnumerator LevelUpEnemyType()
     {

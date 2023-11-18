@@ -1,16 +1,13 @@
-Lives Sytem
-Score System
-Game Manager Events for scoring and lives
-
-Screens
--Main Menu
-
-player collision with enemies
-projectile collision with enemies
-
-enemies vary size, rotation and speed
-enemies split into two and other two when hit
-
-spawninterval into the scriptable object
-
+V-enemies vary size, rotation and speed
+V-spawninterval into the scriptable object
 V-Screenbounds independent sides
+V-projectile collision with enemies
+
+Enemies split into two and other two when hit
+Game Manager Events for scoring and lives
+Lives Sytem - player collision with enemies
+Score System
+Screens, Main Menu
+
+
+
