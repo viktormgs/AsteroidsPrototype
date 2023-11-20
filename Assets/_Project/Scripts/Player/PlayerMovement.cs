@@ -12,13 +12,13 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate() => Movement();
     void Movement()
     {
-        var playerPosition = new Vector2( PlayerReadInput.horizontalInput, PlayerReadInput.verticalInput);
+        var playerPosition = new Vector2(PlayerReadInput.horizontalInput, PlayerReadInput.verticalInput);
         rb.AddForce(movementSpeed * Time.deltaTime * playerPosition);
 
-        if(playerPosition != Vector2.zero)
+        if (playerPosition != Vector2.zero)
         {
-        var toRotation = Quaternion.LookRotation(transform.forward, playerPosition);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);
+            var toRotation = Quaternion.LookRotation(transform.forward, playerPosition);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);
         }
     }
 }

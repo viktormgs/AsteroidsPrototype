@@ -37,8 +37,8 @@ public class EnemyState : MonoBehaviour
 
     public void DestroyEnemy()
     {
-
-        if (gameObject.CompareTag("Enemy"))
+        //check for size of enemy
+        if (transform.localScale.x <= 0.5f)
         {
             gameObject.SetActive(false);
             EnemySpawner.enemyQueue.Enqueue(gameObject);
