@@ -38,19 +38,17 @@ public class EnemyState : MonoBehaviour
     public void DestroyEnemy()
     {
         //check for size of enemy
-        if (transform.localScale.x <= 0.5f)
+        if (transform.localScale.x >= 3f)
         {
             gameObject.SetActive(false);
             EnemySpawner.enemyQueue.Enqueue(gameObject);
-
-            //Code for children enemies
+            EnemySpawner.SplitEnemies(gameObject.transform.position);
         }
+
         else
         {
             gameObject.SetActive(false);
             EnemySpawner.enemyQueue.Enqueue(gameObject);
         }
-
-
     }
 }

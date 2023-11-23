@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] GameObject enemy;
+    [SerializeField] GameObject gameObjectEnemy;
+    public static GameObject enemy;
     readonly int enemyPoolSize = 3;
     public static readonly Queue<GameObject> enemyQueue = new();
     GameObject inUseEnemy;
@@ -14,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
+        enemy = gameObjectEnemy;
         screenLimit = ScreenBounds.screenLimit;
         cameraHalfHeight = ScreenBounds.cameraHalfHeight;
 
@@ -39,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private GameObject GetEnemy()
+    public static GameObject GetEnemy()
     {
         if (enemyQueue.Count == 0)
         {
@@ -69,4 +71,20 @@ public class EnemySpawner : MonoBehaviour
             _ => new Vector2(screenLimit.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
         };
     }
+
+    public static void SplitEnemies(Vector2 pos)
+    {
+        var splitEnemy = GetEnemy();
+
+        for (int i = 0; i < 2; i++)
+        {
+            var smallEnemy = Instantiate(splitEnemy);
+
+            Vector2 direction = i == 0 ? Vector2.left : Vector2.right;
+            smallEnemy.transform.position = pos;
+            smallEnemy.GetComponent<Rigidbody2D>().velocity = direction;
+        }
+    }
+
+
 }

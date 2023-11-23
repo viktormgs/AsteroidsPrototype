@@ -5,18 +5,13 @@ using System;
 
 public class ScoreManager : MonoBehaviour
 {
-    public Action ScoreEvent;
+    int currentScore;
 
 
-    // Start is called before the first frame update
-    void Start()
+
+    public void AddScore()
     {
-        
+        //
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
