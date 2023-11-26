@@ -10,6 +10,7 @@ public class EnemySpawner : MonoBehaviour
     public static readonly Queue<GameObject> enemyQueue = new();
     GameObject inUseEnemy;
 
+
     float cameraHalfHeight;
     Vector2 screenLimit;
 
@@ -72,19 +73,20 @@ public class EnemySpawner : MonoBehaviour
         };
     }
 
-    public static void SplitEnemies(Vector2 pos)
+    public static void SplitEnemies(Vector2 pos, Quaternion rotation, Vector2 scale, Vector2 direction)
     {
-        var splitEnemy = GetEnemy();
-
         for (int i = 0; i < 2; i++)
         {
-            var smallEnemy = Instantiate(splitEnemy);
+            var smallEnemy = GetEnemy();
+            smallEnemy.transform.SetPositionAndRotation(pos, rotation);
+            smallEnemy.transform.localScale = scale * .5f;
 
-            Vector2 direction = i == 0 ? Vector2.left : Vector2.right;
-            smallEnemy.transform.position = pos;
-            smallEnemy.GetComponent<Rigidbody2D>().velocity = direction;
+            var enemyState = smallEnemy.GetComponent<EnemyState>();
+            enemyState.isSplitEnemy = true;
+
+            var enemyDirectionToCenter = i == 0 ? Vector2.Perpendicular(direction) : -Vector2.Perpendicular(direction);
+            enemyState.SetScaleAndDirection(enemyDirectionToCenter, smallEnemy.transform.localScale);
+            Debug.Log(enemyDirectionToCenter.ToString());
         }
     }
-
-
 }

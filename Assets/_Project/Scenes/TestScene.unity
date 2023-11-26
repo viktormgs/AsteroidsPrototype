@@ -130,10 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 248205382, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 969051228007516250, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -177,18 +173,6 @@ PrefabInstance:
     - target: {fileID: 969051228007516250, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 969051228007516253, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
-      propertyPath: attackSpeed
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 969051228007516253, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
-      propertyPath: projectileSpeed
-      value: 700
-      objectReference: {fileID: 0}
-    - target: {fileID: 969051228007516253, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
-      propertyPath: projectileLifetime
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 969051228007516254, guid: 0c3fc1570d2219842bbd8209a9a40fb7, type: 3}
       propertyPath: m_Name

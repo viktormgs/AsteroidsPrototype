@@ -6,10 +6,12 @@ public class EnemyState : MonoBehaviour
 {
     Rigidbody2D rb;
     int randomSpeed;
-    Vector2 directionToCenter;
+    public Vector2 directionToCenter;
     int randomOrientation;
     Vector3 randomRotation = new();
     int rotationSpeed;
+    [SerializeField] float minSizeForSplit;
+    public bool isSplitEnemy;
 
     private void Start()
     {
@@ -19,10 +21,19 @@ public class EnemyState : MonoBehaviour
         randomSpeed = Random.Range(currentEnemyLvl.minSpeed, currentEnemyLvl.maxSpeed);
         randomOrientation = Random.Range(0, 1) * 2 - 1; //Allows the enemy to rotate one direction or the other
         rotationSpeed = Random.Range(0, 500);
-
         randomRotation = new Vector3(0, 0, randomOrientation);
-        transform.localScale = new Vector2(randomScale, randomScale);
-        directionToCenter = (Vector2.zero - (Vector2)transform.position).normalized;
+        
+        if (isSplitEnemy == false)
+        {
+            SetScaleAndDirection((Vector2.zero - (Vector2)transform.position).normalized, new Vector2(randomScale, randomScale));
+        }
+    }
+
+    public void SetScaleAndDirection(Vector2 direction, Vector2 scale)
+    {
+        directionToCenter = direction;
+        transform.localScale = scale;
+        Debug.Log("Set direction is " + directionToCenter.ToString());
     }
 
     void FixedUpdate()
@@ -38,11 +49,11 @@ public class EnemyState : MonoBehaviour
     public void DestroyEnemy()
     {
         //check for size of enemy
-        if (transform.localScale.x >= 3f)
+        if (transform.localScale.x >= minSizeForSplit)
         {
             gameObject.SetActive(false);
             EnemySpawner.enemyQueue.Enqueue(gameObject);
-            EnemySpawner.SplitEnemies(gameObject.transform.position);
+            EnemySpawner.SplitEnemies(gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.localScale, directionToCenter);
         }
 
         else

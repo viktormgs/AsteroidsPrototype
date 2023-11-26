@@ -5,13 +5,15 @@ using System;
 
 public class ScoreManager : MonoBehaviour
 {
-    int currentScore;
+    public static int currentScore;
 
 
 
-    public void AddScore()
+
+
+    public static int AddScore(int scoreToAdd)
     {
-        //
+        return currentScore += scoreToAdd;
     }
 
 }

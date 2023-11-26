@@ -99,6 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49f55d3c0945b54298aec9beffe2619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  directionToCenter: {x: 0, y: 0}
+  minSizeForSplit: 3.2
 --- !u!50 &6609197317097569289
 Rigidbody2D:
   serializedVersion: 4
