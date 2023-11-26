@@ -11,7 +11,7 @@ public class EnemyHitEvent : MonoBehaviour
     {
         var enemyState = new EnemyState();
         var enemySpawner = new EnemySpawner();
-        var scoreManager = new ScoreManager();
+        //var scoreManager = new ScoreManager();
 
 
         //EnemyInteraction += enemyState.DestroyEnemy;

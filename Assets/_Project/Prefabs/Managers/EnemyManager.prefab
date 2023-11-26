@@ -60,4 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyLvlArray:
   - {fileID: 11400000, guid: f8b27571778dd304a87f9c94fe57edfd, type: 2}
+  - {fileID: 11400000, guid: 1563b9f5b8fc5674eb632d74bb2a1ce8, type: 2}
+  - {fileID: 11400000, guid: 464746397a7443e4ba247f4e1f4ea0ab, type: 2}
+  - {fileID: 11400000, guid: e8dc44ff363c0f042b4ca3a9ea13cd1e, type: 2}
   timeForNextLevel: 3
