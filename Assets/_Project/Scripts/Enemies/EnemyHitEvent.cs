@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyHit : MonoBehaviour
+public class EnemyHitEvent : MonoBehaviour
 {
     public static Action EnemyInteraction;
 
