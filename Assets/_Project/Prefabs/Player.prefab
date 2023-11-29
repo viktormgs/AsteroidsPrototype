@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 969051228007516249}
   - component: {fileID: 969051228007516252}
   - component: {fileID: 969051228007516253}
+  - component: {fileID: -8144386299278512420}
   - component: {fileID: 969051228007516248}
   - component: {fileID: 248205382}
   m_Layer: 7
@@ -132,6 +133,20 @@ MonoBehaviour:
   projectileLifetime: 1
   ammoPoolCapacity: 7
   attackSpeed: 0.2
+--- !u!114 &-8144386299278512420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969051228007516254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcba4da18c3bfb54d9185edafc6b1097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCollider: {fileID: 248205382}
+  invincibilityLifetime: 4
 --- !u!50 &969051228007516248
 Rigidbody2D:
   serializedVersion: 4

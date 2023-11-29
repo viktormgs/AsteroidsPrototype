@@ -33,7 +33,6 @@ public class EnemyState : MonoBehaviour
     {
         directionToCenter = direction;
         transform.localScale = scale;
-        Debug.Log("Set direction is " + directionToCenter.ToString());
     }
 
     void FixedUpdate()

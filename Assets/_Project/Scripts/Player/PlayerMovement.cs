@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
         var playerPosition = new Vector2(PlayerReadInput.horizontalInput, PlayerReadInput.verticalInput);
         rb.AddForce(movementSpeed * Time.deltaTime * playerPosition);
 
-        if (playerPosition != Vector2.zero)
+        if (playerPosition != Vector2.zero) //Rotate player towards direction
         {
             var toRotation = Quaternion.LookRotation(transform.forward, playerPosition);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);

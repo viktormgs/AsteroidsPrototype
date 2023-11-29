@@ -101,6 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   directionToCenter: {x: 0, y: 0}
   minSizeForSplit: 3.2
+  isSplitEnemy: 0
 --- !u!50 &6609197317097569289
 Rigidbody2D:
   serializedVersion: 4
