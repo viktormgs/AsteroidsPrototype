@@ -16,4 +16,4 @@ MonoBehaviour:
   maxSpeed: 100
   minScale: 4
   maxScale: 8
-  spawnInterval: 10
+  spawnInterval: 5
