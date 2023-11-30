@@ -5,13 +5,13 @@ using UnityEngine.UI;
 using System;
 using TMPro;
 
-public class ScoreManager : Events
+public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
 
-    public int currentScore;
-    readonly int addScore = 1;
-    readonly TextMeshProUGUI text;
+    int currentScore;
+    const int addScore = 1;
+    [SerializeField] TextMeshProUGUI text;
 
     void Awake()
     {
@@ -21,15 +21,18 @@ public class ScoreManager : Events
 
     private void Start() => ResetScore();
 
-    public void ResetScore() => currentScore = 0;
+    public void ResetScore() => UpdateScoreToUI(currentScore = 0);
 
-    public void AddScore() => currentScore += addScore;
+    public void AddScore() => UpdateScoreToUI(currentScore += addScore);
 
     public void CheckForNewRecord()
     {
         //Check for new highest score to set a new Record
+    }
 
-
+    void UpdateScoreToUI(int currentScore)
+    {
+        text.text = currentScore.ToString("0000");
     }
 
 }

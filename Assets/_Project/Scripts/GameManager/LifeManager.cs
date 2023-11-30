@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 
-public class LifeManager : Events
+public class LifeManager : MonoBehaviour
 {
     public static LifeManager instance;
     public event Action OnDeath;

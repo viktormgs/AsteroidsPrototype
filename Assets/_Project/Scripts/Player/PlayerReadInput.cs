@@ -8,10 +8,7 @@ public class PlayerReadInput : MonoBehaviour
     public static float verticalInput = 0f;
     public static bool fire;
 
-    void Update()
-    {
-        ReadInput();
-    }
+    void Update() => ReadInput();
 
     void ReadInput()
     {
