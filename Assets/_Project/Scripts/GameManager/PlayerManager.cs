@@ -6,10 +6,11 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
-    [SerializeField] BoxCollider2D boxCollider;
+
     Renderer materialRenderer;
     [SerializeField] int invincibilityLifetime = 4;
-
+    const int playerLayer = 7;
+    const int enemyLayer = 9; 
 
     void Awake()
     {
@@ -26,15 +27,11 @@ public class PlayerManager : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            other.gameObject.SetActive(false);
-            //if (other.TryGetComponent(out EnemyState enemyState))
-            //{
-            //    gameObject.SetActive(false);
-            //    enemyState.DestroyEnemy();
-            //}
-
+            if (other.TryGetComponent(out EnemyState enemyState))
+            {
+                enemyState.DestroyEnemy();
+            }
             LifeManager.instance.LifeLostEvent();
-            Debug.Log("Player collided with enemy");
         }
     }
 
@@ -48,13 +45,13 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 0; i < invincibilityLifetime; i++)
         {
-            boxCollider.enabled = false;
+            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer);
             materialRenderer.enabled = false;
             yield return new WaitForSeconds(.3f);
             materialRenderer.enabled = true;
             yield return new WaitForSeconds(.3f);
         }
-        boxCollider.enabled = true;
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
         yield break;
     }
 }

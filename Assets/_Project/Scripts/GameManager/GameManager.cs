@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GameManager : MonoBehaviour
+public class GameManager : ScreensManager
 {
     public static GameManager instance;
     public event Action OnGameOver;
     public event Action OnReset;
-    public event Action OnPause;
-    public event Action OnResume;
 
     void Awake()
     {
@@ -19,19 +17,29 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
-
     }
 
     void Start()
     {
+        mainMenuScreen = InstantiateScreen(screensArray[0]);
+        pauseScreen = InstantiateScreen(screensArray[1]);
+        gameOverScreen = InstantiateScreen(screensArray[2]);
+
         //OnGameOver += ScoreManager.instance.CheckForNewRecord;
         OnGameOver += LifeManager.instance.ResetLives;
         OnGameOver += GameOverScreen;
-        //add ui screens to the events
+
+        MenuInput.instance.OnEscapePressed += PauseGameHandler;
 
         OnReset += LifeManager.instance.ResetLives;
         OnReset += ScoreManager.instance.ResetScore;
+    }
 
+    GameObject InstantiateScreen(GameObject gameObject)
+    {
+        var instantiatedGameObject = Instantiate(gameObject, UIRoot.instance.gameObject.transform);
+        instantiatedGameObject.SetActive(false);
+        return instantiatedGameObject;
     }
 
     public void Reset()
@@ -39,7 +47,7 @@ public class GameManager : MonoBehaviour
         OnReset?.Invoke();
     }
 
-    public void LostAllLives()
+    public void LostAllLivesEvent()
     {
         OnGameOver?.Invoke();
     }
@@ -47,21 +55,23 @@ public class GameManager : MonoBehaviour
 
     // Screens handling from this point
 
-    void PauseGameScreen()
+    public void PauseGameHandler()
     {
-        Time.timeScale = 0;
-        ScreensManager.instance.ShowScreen(ScreensManager.instance.pause);
+        if (!IsScreenShown(pauseScreen))
+        {
+            Time.timeScale = 0;
+            ShowScreen(pauseScreen);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            HideScreen(pauseScreen);
+        }
     }
 
-    void ResumeGameScreen()
+    public void GameOverScreen()
     {
-        Time.timeScale = 1;
-        ScreensManager.instance.HideScreen(ScreensManager.instance.pause);
-    }
-
-    void GameOverScreen()
-    {
-        ScreensManager.instance.ShowScreen(ScreensManager.instance.gameOver);
+        ShowScreen(gameOverScreen);
     }
 
 }

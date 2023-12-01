@@ -39,7 +39,7 @@ public class LifeManager : MonoBehaviour
         if (currentLife == 0)
         {
             Debug.Log("Calling it lost");
-            GameManager.instance.LostAllLives();
+            GameManager.instance.LostAllLivesEvent();
         }
     }
 

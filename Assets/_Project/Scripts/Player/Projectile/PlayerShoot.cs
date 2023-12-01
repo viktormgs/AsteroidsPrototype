@@ -54,7 +54,7 @@ public class PlayerShoot : MonoBehaviour
             //Set Projectile Pos and Rotation
             inUseProjectile.transform.SetPositionAndRotation(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0), gameObject.transform.rotation); 
 
-            rb.velocity = projectileSpeed * Time.deltaTime * transform.up; //Projectile Movement
+            rb.velocity = projectileSpeed * transform.up; //Projectile Movement
 
             //Call Projectile lifetime
             StartCoroutine(ProjectileLifetime(inUseProjectile));

@@ -4,22 +4,9 @@ using UnityEngine;
 
 public class ScreensManager : MonoBehaviour
 {
-    public static ScreensManager instance;
-
-    public GameObject pause;
-    public GameObject mainMenu;
-    public GameObject gameOver;
+    public GameObject[] screensArray;
+    [HideInInspector] public GameObject mainMenuScreen, pauseScreen, gameOverScreen;
     GameObject currentScreen;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else Destroy(gameObject);
-    }
 
     public void ShowScreen(GameObject screen)
     {
@@ -32,7 +19,12 @@ public class ScreensManager : MonoBehaviour
     public void HideScreen(GameObject screen)
     {
         if (currentScreen == screen) currentScreen.SetActive(false);
+        currentScreen = null;
     }
 
+    public bool IsScreenShown(GameObject screen)
+    {
+        return screen == currentScreen;
+    }
 
 }

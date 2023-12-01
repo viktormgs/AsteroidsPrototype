@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     void Movement()
     {
         var playerPosition = new Vector2(PlayerReadInput.horizontalInput, PlayerReadInput.verticalInput);
-        rb.AddForce(movementSpeed * Time.deltaTime * playerPosition);
+        rb.AddForce(movementSpeed * playerPosition);
 
         if (playerPosition != Vector2.zero) //Rotate player towards direction
         {
