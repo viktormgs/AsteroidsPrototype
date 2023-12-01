@@ -22,7 +22,7 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < enemyPoolSize; i++)
         {
-            GameObject enemyToPool = Instantiate(enemy);
+            GameObject enemyToPool = Instantiate(enemy, gameObject.transform);
             enemyToPool.SetActive(false);
             enemyQueue.Enqueue(enemyToPool);
         }

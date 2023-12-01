@@ -5,15 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class Boot : MonoBehaviour
 {
-    GameObject[] prefabsToInstantiate;
-    GameObject[] managersToInstantiate;
+    [SerializeField] GameObject[] prefabsToInstantiate;
+    [SerializeField] GameObject[] managersToInstantiate;
     Scene[] scenesToInstantiate;
 
     private void Awake()
     {
         
     }
-    // Start is called before the first frame update
+    /// <summary>
+    /// Sets up Life, 
+    /// </summary>
     void Start()
     {
         foreach (GameObject manager in managersToInstantiate)
