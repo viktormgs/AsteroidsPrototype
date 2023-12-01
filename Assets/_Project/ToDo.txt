@@ -5,6 +5,12 @@ V-projectile collision with enemies
 V-Enemies split into two when hit
 
 
+
+Score System
+Manage scenes
+
+
+
 Game Manager Events for scoring and lives
 Lives Sytem - player collision with enemies
 Score System

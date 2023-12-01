@@ -71,6 +71,7 @@ public class GameManager : ScreensManager
 
     public void GameOverScreen()
     {
+        Time.timeScale = 0;
         ShowScreen(gameOverScreen);
     }
 
