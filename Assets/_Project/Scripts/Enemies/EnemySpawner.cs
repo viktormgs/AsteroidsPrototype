@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public static EnemySpawner instance;
+
     [SerializeField] GameObject gameObjectEnemy;
     public static GameObject enemy;
     readonly int enemyPoolSize = 3;
     public static readonly Queue<GameObject> enemyQueue = new();
     GameObject inUseEnemy;
 
-
     float cameraHalfHeight;
     Vector2 screenLimit;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -22,11 +32,16 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < enemyPoolSize; i++)
         {
-            GameObject enemyToPool = Instantiate(enemy, gameObject.transform);
-            enemyToPool.SetActive(false);
-            enemyQueue.Enqueue(enemyToPool);
+            EnemyInstantiator();
         }
         StartCoroutine(Spawner());
+    }
+
+    void EnemyInstantiator()
+    {
+        GameObject enemyToPool = Instantiate(enemy, gameObject.transform);
+        enemyToPool.SetActive(false);
+        enemyQueue.Enqueue(enemyToPool);
     }
 
     IEnumerator Spawner() //Is Coroutine because can use spawnInterval as time delay
@@ -42,13 +57,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public static GameObject GetEnemy()
+    GameObject GetEnemy()
     {
         if (enemyQueue.Count == 0)
         {
-            GameObject newEnemyToPool = Instantiate(enemy);
-            newEnemyToPool.SetActive(false);
-            enemyQueue.Enqueue(newEnemyToPool);
+            EnemyInstantiator();
         }
 
         GameObject pooledEnemy = enemyQueue.Dequeue();
@@ -73,7 +86,7 @@ public class EnemySpawner : MonoBehaviour
         };
     }
 
-    public static void SplitEnemies(Vector2 pos, Quaternion rotation, Vector2 scale, Vector2 direction)
+    public void SplitEnemies(Vector2 pos, Quaternion rotation, Vector2 scale, Vector2 direction)
     {
         for (int i = 0; i < 2; i++)
         {
@@ -86,7 +99,6 @@ public class EnemySpawner : MonoBehaviour
 
             var enemyDirectionToCenter = i == 0 ? Vector2.Perpendicular(direction) : -Vector2.Perpendicular(direction);
             enemyState.SetScaleAndDirection(enemyDirectionToCenter, smallEnemy.transform.localScale);
-            Debug.Log(enemyDirectionToCenter.ToString());
         }
     }
 }

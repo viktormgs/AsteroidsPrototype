@@ -5,37 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class Boot : MonoBehaviour
 {
-    [SerializeField] GameObject[] prefabsToInstantiate;
-    [SerializeField] GameObject[] managersToInstantiate;
-    Scene[] scenesToInstantiate;
+    //[SerializeField] GameObject[] prefabsToInstantiate;
+    //[SerializeField] GameObject[] managersToInstantiate;
+    //[SerializeField] string[] scenesToInstantiate;
 
-    private void Awake()
-    {
-        
-    }
-    /// <summary>
-    /// Sets up Life, 
-    /// </summary>
     void Start()
     {
-        foreach (GameObject manager in managersToInstantiate)
-        {
-            InstantiateManager(manager, UIRoot.instance.gameObject.transform);
-        }
-        foreach (GameObject prefab in prefabsToInstantiate)
-        {
-            InstantiateManager(prefab, null);
-        }
-        //foreach (Scene scene in scenesToInstantiate)
-        //{
-        //    //Initialize scenes
-        //}
+        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2, LoadSceneMode.Additive);
     }
 
-    GameObject InstantiateManager(GameObject gameObject, Transform parent)
-    {
-        var instantiatedGameObject = Instantiate(gameObject, parent);
-        if(instantiatedGameObject.activeSelf == false) instantiatedGameObject.SetActive(true);
-        return instantiatedGameObject;
-    }
+    //void InstantiateManager(GameObject gameObject, Transform parent)
+    //{
+    //    var instantiatedGameObject = Instantiate(gameObject, parent);
+    //    if(instantiatedGameObject.activeSelf == false) instantiatedGameObject.SetActive(true);
+    //}
 }

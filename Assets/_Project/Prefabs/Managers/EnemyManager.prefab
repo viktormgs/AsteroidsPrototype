@@ -63,4 +63,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1563b9f5b8fc5674eb632d74bb2a1ce8, type: 2}
   - {fileID: 11400000, guid: 464746397a7443e4ba247f4e1f4ea0ab, type: 2}
   - {fileID: 11400000, guid: e8dc44ff363c0f042b4ca3a9ea13cd1e, type: 2}
-  timeForNextLevel: 3
+  timeForNextLevel: 7

@@ -152,6 +152,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d10cf402160e56a4b8781d5213375c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabsToInstantiate: []
+  managersToInstantiate:
+  - {fileID: 925531351014774, guid: 1cdf0fae57867d74c9c8d536bf20302b, type: 3}
+  - {fileID: 3850258425364537207, guid: ad3a15d6c2ccdfd4db747116f880f46d, type: 3}
+  - {fileID: 8027247732207951900, guid: 8b15179375523eb448db799d570a2918, type: 3}
+  scenesToInstantiate:
+  - Game
+  - UI
 --- !u!4 &415048170
 Transform:
   m_ObjectHideFlags: 0

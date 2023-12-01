@@ -6,12 +6,12 @@ public class EnemyState : MonoBehaviour
 {
     Rigidbody2D rb;
     int randomSpeed;
-    public Vector2 directionToCenter;
+    [HideInInspector] public Vector2 directionToCenter;
     int randomOrientation;
     Vector3 randomRotation = new();
     int rotationSpeed;
     [SerializeField] float minSizeForSplit;
-    public bool isSplitEnemy;
+    [HideInInspector] public bool isSplitEnemy;
 
     private void Start()
     {
@@ -41,7 +41,7 @@ public class EnemyState : MonoBehaviour
         Rotation();
     }
 
-    void Movement()=> rb.velocity = randomSpeed * Time.deltaTime * directionToCenter;
+    void Movement()=> rb.velocity = randomSpeed * directionToCenter;
 
     void Rotation() => transform.Rotate(randomRotation, rotationSpeed * Time.deltaTime);
 
@@ -52,7 +52,7 @@ public class EnemyState : MonoBehaviour
         {
             gameObject.SetActive(false);
             EnemySpawner.enemyQueue.Enqueue(gameObject);
-            EnemySpawner.SplitEnemies(gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.localScale, directionToCenter);
+            EnemySpawner.instance.SplitEnemies(gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.localScale, directionToCenter);
         }
 
         else

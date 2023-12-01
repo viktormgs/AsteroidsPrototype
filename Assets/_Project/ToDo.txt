@@ -7,8 +7,9 @@ V-Enemies split into two when hit
 
 
 Score System
-Manage scenes
-
+Manage scene loading through boot
+Lives should not reset back to 3 and force gameover
+gameover should not be skipped with paused menu
 
 
 Game Manager Events for scoring and lives
