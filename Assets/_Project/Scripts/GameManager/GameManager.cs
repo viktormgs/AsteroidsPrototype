@@ -25,13 +25,14 @@ public class GameManager : ScreensManager
         gameOverScreen = InstantiateScreen(screensArray[2]);
 
         //OnGameOver += ScoreManager.instance.CheckForNewRecord;
-        OnGameOver += LifeManager.instance.ResetLives;
+        //OnGameOver += LifeManager.instance.ResetLives;
         OnGameOver += GameOverScreen;
 
         MenuInput.instance.OnEscapePressed += PauseGameHandler;
 
         OnReset += LifeManager.instance.ResetLives;
         OnReset += ScoreManager.instance.ResetScore;
+        OnReset += PlayerManager.instance.ResetPosition;
     }
 
     GameObject InstantiateScreen(GameObject gameObject)
@@ -68,10 +69,19 @@ public class GameManager : ScreensManager
         }
     }
 
-    public void GameOverScreen()
+    void GameOverScreen()
     {
         Time.timeScale = 0;
         ShowScreen(gameOverScreen);
+    }
+    public void NewGameEvent()
+    {
+        if (gameOverScreen.activeSelf)
+        {
+            Time.timeScale = 1;
+            HideScreen(gameOverScreen);
+        }
+        OnReset?.Invoke();
     }
 
 }

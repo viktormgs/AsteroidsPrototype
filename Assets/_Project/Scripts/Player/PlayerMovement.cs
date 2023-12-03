@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : PlayerReadInput
 {
     Rigidbody2D rb;
     [SerializeField] float movementSpeed;
@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate() => Movement();
     void Movement()
     {
-        var playerPosition = new Vector2(PlayerReadInput.horizontalInput, PlayerReadInput.verticalInput);
+        var playerPosition = new Vector2(horizontalInput, verticalInput);
         rb.AddForce(movementSpeed * playerPosition);
 
         if (playerPosition != Vector2.zero) //Rotate player towards direction

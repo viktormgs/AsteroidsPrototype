@@ -50,7 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0346f55cbd3bcdf47be76398a2d9106c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 1300622374178784089}
+  textScore: {fileID: 1300622374178784089}
+  textRecord: {fileID: 0}
 --- !u!1 &5392568129989900619
 GameObject:
   m_ObjectHideFlags: 0

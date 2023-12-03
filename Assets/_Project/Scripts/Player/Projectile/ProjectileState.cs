@@ -10,6 +10,7 @@ public class ProjectileState : MonoBehaviour
         {
             gameObject.SetActive(false);
             enemyState.DestroyEnemy();
+            ScoreManager.instance.EnemyIsDestroyedEvent();
         }
     }
 }

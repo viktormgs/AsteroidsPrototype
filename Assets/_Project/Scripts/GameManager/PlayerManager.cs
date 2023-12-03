@@ -37,19 +37,26 @@ public class PlayerManager : MonoBehaviour
 
     public void Respawn()
     {
-        transform.position = Vector2.zero;
         StartCoroutine(Invincibility());
+        ResetPosition();
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = Vector2.zero;
     }
 
     IEnumerator Invincibility()
     {
+        float flickerRate = .4f;
         for (int i = 0; i < invincibilityLifetime; i++)
         {
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer);
+            yield return new WaitForSeconds(flickerRate);
             materialRenderer.enabled = false;
-            yield return new WaitForSeconds(.3f);
+            yield return new WaitForSeconds(flickerRate);
             materialRenderer.enabled = true;
-            yield return new WaitForSeconds(.3f);
+            flickerRate /= 1.5f;
         }
         Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
         yield break;

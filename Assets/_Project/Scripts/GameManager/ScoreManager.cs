@@ -8,10 +8,13 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
+    public event Action OnEnemyDestroyed;
 
     int currentScore;
     const int addScore = 1;
-    [SerializeField] TextMeshProUGUI text;
+    int currentRecord;
+    public TextMeshProUGUI textScore;
+    public TextMeshProUGUI textRecord;
 
     void Awake()
     {
@@ -19,20 +22,37 @@ public class ScoreManager : MonoBehaviour
         else if (instance != this) Destroy(gameObject);
     }
 
-    private void Start() => ResetScore();
+    private void Start() 
+    {
+        OnEnemyDestroyed += AddScore;
+        OnEnemyDestroyed += CheckForNewRecord;
+
+        ResetScore();
+    }
+
+    public void EnemyIsDestroyedEvent()
+    {
+        OnEnemyDestroyed?.Invoke();
+    }
 
     public void ResetScore() => UpdateScoreToUI(currentScore = 0);
 
-    public void AddScore() => UpdateScoreToUI(currentScore += addScore);
+    void AddScore() => UpdateScoreToUI(currentScore += addScore);
 
-    public void CheckForNewRecord()
+    void CheckForNewRecord()
     {
-        //Check for new highest score to set a new Record
+        //Check for new highest score to set a new Records
+        if (currentRecord < currentScore)
+        {
+            currentRecord = currentScore;
+            PlayerPrefs.SetInt("Highest Score",currentRecord);
+            PlayerPrefs.Save();
+        }
     }
 
     void UpdateScoreToUI(int currentScore)
     {
-        text.text = currentScore.ToString("0000");
+        textScore.text = currentScore.ToString("0000");
     }
 
 }

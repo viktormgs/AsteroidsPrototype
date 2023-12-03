@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.UI;
 
 public class LifeManager : MonoBehaviour
 {
@@ -34,11 +33,9 @@ public class LifeManager : MonoBehaviour
         {
             currentLife -= damage;
             lifeSprite[currentLife].SetActive(false);
-            Debug.Log(currentLife);
         }
         if (currentLife == 0)
         {
-            Debug.Log("Calling it lost");
             GameManager.instance.LostAllLivesEvent();
         }
     }
@@ -46,7 +43,6 @@ public class LifeManager : MonoBehaviour
     public void ResetLives() 
     {
         currentLife = lifeSprite.Length;
-        Debug.Log(currentLife + " lives after reset");
         for (int i = 0; i < lifeSprite.Length; i++)
         {
             lifeSprite[i].SetActive(true);

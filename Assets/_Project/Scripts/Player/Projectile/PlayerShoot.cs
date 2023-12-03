@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShoot : MonoBehaviour
+public class PlayerShoot : PlayerReadInput
 {
     [SerializeField] GameObject projectile;
     [SerializeField] float projectileSpeed;
@@ -45,7 +45,7 @@ public class PlayerShoot : MonoBehaviour
 
     void Fire()
     {
-        if (PlayerReadInput.fire && canShoot)
+        if (fire && canShoot)
         {
             StartCoroutine(AttackSpeed());
             inUseProjectile = GetProjectile();
