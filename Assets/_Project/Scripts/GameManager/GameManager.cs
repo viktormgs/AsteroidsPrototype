@@ -6,8 +6,10 @@ using System;
 public class GameManager : ScreensManager
 {
     public static GameManager instance;
-    public event Action OnGameOver;
-    public event Action OnReset;
+    public Action OnGameOver;
+    public Action OnPlay;
+    public Action OnGoToMainMenu;
+    public Action OnQuitGame;
 
     void Awake()
     {
@@ -24,15 +26,24 @@ public class GameManager : ScreensManager
         pauseScreen = InstantiateScreen(screensArray[1]);
         gameOverScreen = InstantiateScreen(screensArray[2]);
 
-        //OnGameOver += ScoreManager.instance.CheckForNewRecord;
-        //OnGameOver += LifeManager.instance.ResetLives;
+
+        //Event assigning
+
+        MenuInput.instance.OnEscapePressed += PauseScreenHandler;
+
+        OnPlay += LifeManager.instance.ResetLives;
+        OnPlay += ScoreManager.instance.ResetScore;
+        OnPlay += PlayerManager.instance.ResetPosition;
+        OnPlay += EnemyTypeManager.instance.DifficultyReset;
+        OnPlay += NewGameEvent;
+        //add enemyspawner resume?
+        OnGoToMainMenu += MainMenuScreen;
+        OnGoToMainMenu += EnemySpawner.instance.EnemySpawnerReset;
+
         OnGameOver += GameOverScreen;
+        OnGameOver += EnemySpawner.instance.EnemySpawnerReset;
 
-        MenuInput.instance.OnEscapePressed += PauseGameHandler;
-
-        OnReset += LifeManager.instance.ResetLives;
-        OnReset += ScoreManager.instance.ResetScore;
-        OnReset += PlayerManager.instance.ResetPosition;
+        OnQuitGame += QuitGame;
     }
 
     GameObject InstantiateScreen(GameObject gameObject)
@@ -42,46 +53,33 @@ public class GameManager : ScreensManager
         return instantiatedGameObject;
     }
 
-    public void Reset()
+    public void CallAction(Action eventToCall)
     {
-        OnReset?.Invoke();
+        eventToCall?.Invoke();
     }
 
-    public void LostAllLivesEvent()
+    void QuitGame()
     {
-        OnGameOver?.Invoke();
+        Application.Quit();
     }
 
 
     // Screens handling from this point
 
-    public void PauseGameHandler()
+    public void PauseScreenHandler()
     {
-        if (!IsScreenShown(pauseScreen))
-        {
-            Time.timeScale = 0;
-            ShowScreen(pauseScreen);
-        }
-        else
-        {
-            Time.timeScale = 1;
-            HideScreen(pauseScreen);
-        }
+        if (gameOverScreen.activeSelf || mainMenuScreen.activeSelf) return;
+        if (!IsScreenShown(pauseScreen)) 
+            ShowScreen(pauseScreen, true);
+        else { HideScreen(pauseScreen, false); }
     }
 
-    void GameOverScreen()
-    {
-        Time.timeScale = 0;
-        ShowScreen(gameOverScreen);
-    }
-    public void NewGameEvent()
-    {
-        if (gameOverScreen.activeSelf)
-        {
-            Time.timeScale = 1;
-            HideScreen(gameOverScreen);
-        }
-        OnReset?.Invoke();
-    }
+    void GameOverScreen() => ShowScreen(gameOverScreen, true);
+    void MainMenuScreen() => ShowScreen(mainMenuScreen, true);
 
+    void NewGameEvent()
+    {
+        if (gameOverScreen.activeSelf) HideScreen(gameOverScreen, false);
+        else if (mainMenuScreen.activeSelf) HideScreen(mainMenuScreen, false);
+    }
 }

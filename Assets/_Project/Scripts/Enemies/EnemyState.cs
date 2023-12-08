@@ -12,6 +12,7 @@ public class EnemyState : MonoBehaviour
     int rotationSpeed;
     [SerializeField] float minSizeForSplit;
     [HideInInspector] public bool isSplitEnemy;
+    EnemySpawner enemySpawner = EnemySpawner.instance;
 
     private void Start()
     {
@@ -51,14 +52,17 @@ public class EnemyState : MonoBehaviour
         if (transform.localScale.x >= minSizeForSplit)
         {
             gameObject.SetActive(false);
-            EnemySpawner.enemyQueue.Enqueue(gameObject);
-            EnemySpawner.instance.SplitEnemies(gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.localScale, directionToCenter);
+            enemySpawner.enemyQueue.Enqueue(gameObject);
+            enemySpawner.activeEnemyList.Remove(gameObject);
+            
+            enemySpawner.SplitEnemies(gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.localScale, directionToCenter);
         }
-
         else
         {
             gameObject.SetActive(false);
-            EnemySpawner.enemyQueue.Enqueue(gameObject);
+            enemySpawner.enemyQueue.Enqueue(gameObject);
+            enemySpawner.activeEnemyList.Remove(gameObject);
+
         }
     }
 }

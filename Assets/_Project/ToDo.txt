@@ -3,20 +3,14 @@ V-spawninterval into the scriptable object
 V-Screenbounds independent sides
 V-projectile collision with enemies
 V-Enemies split into two when hit
+V-Manage scene loading through boot
+V-Lives should not reset back to 3 and force gameover
+V-gameover should not be skipped with paused menu
+V-Lives SyStem - player collision with enemies
+V-Screens, Main Menu
+V-Game Manager Events for scoring and lives
 
-
-
-Score System
-Manage scene loading through boot
-Lives should not reset back to 3 and force gameover
-gameover should not be skipped with paused menu
-
-
-Game Manager Events for scoring and lives
-Lives Sytem - player collision with enemies
-Score System
-Screens, Main Menu
-
+Score System NewRecord
 Add VHS-like Shader 
 
 

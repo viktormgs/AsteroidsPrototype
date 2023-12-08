@@ -8,8 +8,9 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] GameObject gameObjectEnemy;
     public static GameObject enemy;
-    readonly int enemyPoolSize = 3;
-    public static readonly Queue<GameObject> enemyQueue = new();
+    const int enemyPoolSize = 3;
+    public readonly Queue<GameObject> enemyQueue = new();
+    public List<GameObject> activeEnemyList = new();
     GameObject inUseEnemy;
 
     float cameraHalfHeight;
@@ -66,6 +67,7 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject pooledEnemy = enemyQueue.Dequeue();
         pooledEnemy.SetActive(true);
+        activeEnemyList.Add(pooledEnemy);
         return pooledEnemy;
     }
 
@@ -100,5 +102,15 @@ public class EnemySpawner : MonoBehaviour
             var enemyDirectionToCenter = i == 0 ? Vector2.Perpendicular(direction) : -Vector2.Perpendicular(direction);
             enemyState.SetScaleAndDirection(enemyDirectionToCenter, smallEnemy.transform.localScale);
         }
+    }
+
+    public void EnemySpawnerReset()
+    {
+        foreach (GameObject activeEnemy in activeEnemyList)
+        {
+                activeEnemy.SetActive(false);
+                enemyQueue.Enqueue(activeEnemy);
+        }
+        activeEnemyList.Clear();
     }
 }

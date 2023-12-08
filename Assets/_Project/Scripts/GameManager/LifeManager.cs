@@ -25,7 +25,12 @@ public class LifeManager : MonoBehaviour
         OnDeath += PlayerManager.instance.Respawn;
     }
 
-    public void LifeLostEvent() => OnDeath?.Invoke();
+    public void LifeLostEvent()
+    {
+        if (currentLife > 1) OnDeath += PlayerManager.instance.ResetPosition;
+        else { OnDeath -= PlayerManager.instance.ResetPosition; }
+        OnDeath?.Invoke();
+    }
 
     void RemoveLife()
     {
@@ -36,7 +41,7 @@ public class LifeManager : MonoBehaviour
         }
         if (currentLife == 0)
         {
-            GameManager.instance.LostAllLivesEvent();
+            GameManager.instance.CallAction(GameManager.instance.OnGameOver);
         }
     }
 

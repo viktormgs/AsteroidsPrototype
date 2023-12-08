@@ -38,7 +38,6 @@ public class PlayerManager : MonoBehaviour
     public void Respawn()
     {
         StartCoroutine(Invincibility());
-        ResetPosition();
     }
 
     public void ResetPosition()

@@ -35,7 +35,10 @@ public class ScoreManager : MonoBehaviour
         OnEnemyDestroyed?.Invoke();
     }
 
-    public void ResetScore() => UpdateScoreToUI(currentScore = 0);
+    public void ResetScore()
+    {
+        UpdateScoreToUI(currentScore = 0);
+    }
 
     void AddScore() => UpdateScoreToUI(currentScore += addScore);
 
@@ -48,11 +51,11 @@ public class ScoreManager : MonoBehaviour
             PlayerPrefs.SetInt("Highest Score",currentRecord);
             PlayerPrefs.Save();
         }
-    }
+    } 
 
     void UpdateScoreToUI(int currentScore)
     {
-        textScore.text = currentScore.ToString("0000");
+        textScore.text = currentScore.ToString();
     }
 
 }
