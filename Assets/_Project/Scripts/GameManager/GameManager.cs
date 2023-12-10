@@ -66,7 +66,7 @@ public class GameManager : ScreensManager
 
     // Screens handling from this point
 
-    public void PauseScreenHandler()
+    void PauseScreenHandler()
     {
         if (gameOverScreen.activeSelf || mainMenuScreen.activeSelf) return;
         if (!IsScreenShown(pauseScreen)) 

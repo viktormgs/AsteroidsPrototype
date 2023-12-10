@@ -52,6 +52,6 @@ public class MenuInput : MonoBehaviour
     private void ReadInput()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) PressedEscape = !PressedEscape;
-         PressedEnter = Input.GetKeyDown(KeyCode.KeypadEnter);
+        PressedEnter = Input.GetKeyDown(KeyCode.KeypadEnter);
     }
 }

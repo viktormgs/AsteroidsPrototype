@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUI : MonoBehaviour
+public class MainMenuUI : MonoBehaviour 
 {
     [SerializeField] Button play;
     [SerializeField] Button exitGame;
@@ -16,5 +16,11 @@ public class MainMenuUI : MonoBehaviour
     }
     
     void Play() => gameManager.CallAction(gameManager.OnPlay);
+    void OpenOptions()
+    {
+
+    }
     void ExitGame()=> gameManager.CallAction(gameManager.OnQuitGame);
+
+
 }

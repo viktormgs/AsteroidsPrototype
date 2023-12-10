@@ -48,7 +48,7 @@ public class EnemyState : MonoBehaviour
 
     public void DestroyEnemy()
     {
-        //check for size of enemy
+        //check for size before destroying
         if (transform.localScale.x >= minSizeForSplit)
         {
             gameObject.SetActive(false);
