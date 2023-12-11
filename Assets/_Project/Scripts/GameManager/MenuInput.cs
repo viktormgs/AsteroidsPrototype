@@ -10,7 +10,7 @@ public class MenuInput : MonoBehaviour
     public event Action OnEnterPressed;
 
     [HideInInspector] public bool hasPressedEscape;
-    [HideInInspector] bool PressedEscape
+    [HideInInspector] bool _PressedEscape
     {
         get { return hasPressedEscape; }
         set
@@ -23,7 +23,7 @@ public class MenuInput : MonoBehaviour
         }
     }
     [HideInInspector] public bool hasPressedEnter;
-    [HideInInspector] bool PressedEnter
+    [HideInInspector] bool _PressedEnter
     {
         get { return hasPressedEnter; }
         set
@@ -51,7 +51,7 @@ public class MenuInput : MonoBehaviour
 
     private void ReadInput()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) PressedEscape = !PressedEscape;
-        PressedEnter = Input.GetKeyDown(KeyCode.KeypadEnter);
+        if (Input.GetKeyDown(KeyCode.Escape)) _PressedEscape = !_PressedEscape;
+        _PressedEnter = Input.GetKeyDown(KeyCode.KeypadEnter);
     }
 }

@@ -16,10 +16,7 @@ public class MainMenuUI : MonoBehaviour
     }
     
     void Play() => gameManager.CallAction(gameManager.OnPlay);
-    void OpenOptions()
-    {
 
-    }
     void ExitGame()=> gameManager.CallAction(gameManager.OnQuitGame);
 
 

@@ -15,6 +15,21 @@ public class ScoreManager : MonoBehaviour
     int currentRecord;
     public TextMeshProUGUI textScore;
     public TextMeshProUGUI textRecord;
+    bool isNewRecord;
+
+    //encapsulation to call once for new record during game, should reset after game over
+    bool _isNewRecord
+    {
+        get { return isNewRecord; }
+        set
+        {
+            if (isNewRecord == true)
+            {
+                isNewRecord = value;
+                NewRecordIngame();
+            }
+        }
+    }
 
     void Awake()
     {
@@ -27,7 +42,7 @@ public class ScoreManager : MonoBehaviour
         OnEnemyDestroyed += AddScore;
         OnEnemyDestroyed += CheckForNewRecord;
 
-        ResetScore();
+        ResetIngameScore();
     }
 
     public void EnemyIsDestroyedEvent()
@@ -35,12 +50,18 @@ public class ScoreManager : MonoBehaviour
         OnEnemyDestroyed?.Invoke();
     }
 
-    public void ResetScore()
+    public void ResetIngameScore()
     {
         UpdateScoreToUI(currentScore = 0);
+        _isNewRecord = false;
     }
 
     void AddScore() => UpdateScoreToUI(currentScore += addScore);
+
+    void NewRecordIngame()
+    {
+       
+    }
 
     void CheckForNewRecord()
     {
@@ -50,6 +71,7 @@ public class ScoreManager : MonoBehaviour
             currentRecord = currentScore;
             PlayerPrefs.SetInt("Highest Score",currentRecord);
             PlayerPrefs.Save();
+            isNewRecord = true;
         }
     } 
 
@@ -58,4 +80,8 @@ public class ScoreManager : MonoBehaviour
         textScore.text = currentScore.ToString();
     }
 
+    void ShowNewRecord()
+    {
+
+    }
 }

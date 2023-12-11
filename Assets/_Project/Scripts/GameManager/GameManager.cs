@@ -32,7 +32,7 @@ public class GameManager : ScreensManager
         MenuInput.instance.OnEscapePressed += PauseScreenHandler;
 
         OnPlay += LifeManager.instance.ResetLives;
-        OnPlay += ScoreManager.instance.ResetScore;
+        OnPlay += ScoreManager.instance.ResetIngameScore;
         OnPlay += PlayerManager.instance.ResetPosition;
         OnPlay += EnemyTypeManager.instance.DifficultyReset;
         OnPlay += NewGameEvent;
