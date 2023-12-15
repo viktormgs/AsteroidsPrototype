@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 using TMPro;
 
@@ -9,13 +8,14 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
     public event Action OnEnemyDestroyed;
+    public Action OnIngameNewRecord;
 
     int currentScore;
     const int addScore = 1;
     int currentRecord;
     public TextMeshProUGUI textScore;
-    public TextMeshProUGUI textRecord;
     bool isNewRecord;
+
 
     //encapsulation to call once for new record during game, should reset after game over
     bool _isNewRecord
@@ -23,10 +23,10 @@ public class ScoreManager : MonoBehaviour
         get { return isNewRecord; }
         set
         {
-            if (isNewRecord == true)
+            if (value == true)
             {
                 isNewRecord = value;
-                NewRecordIngame();
+                OnIngameNewRecord?.Invoke();
             }
         }
     }
@@ -43,6 +43,7 @@ public class ScoreManager : MonoBehaviour
         OnEnemyDestroyed += CheckForNewRecord;
 
         ResetIngameScore();
+        PlayerPrefs.GetInt("Highest Score", currentRecord);
     }
 
     public void EnemyIsDestroyedEvent()
@@ -58,30 +59,17 @@ public class ScoreManager : MonoBehaviour
 
     void AddScore() => UpdateScoreToUI(currentScore += addScore);
 
-    void NewRecordIngame()
-    {
-       
-    }
 
     void CheckForNewRecord()
     {
-        //Check for new highest score to set a new Records
-        if (currentRecord < currentScore)
+        if (currentScore > currentRecord)
         {
             currentRecord = currentScore;
             PlayerPrefs.SetInt("Highest Score",currentRecord);
             PlayerPrefs.Save();
-            isNewRecord = true;
+            if(!isNewRecord) _isNewRecord = true;
         }
     } 
 
-    void UpdateScoreToUI(int currentScore)
-    {
-        textScore.text = currentScore.ToString();
-    }
-
-    void ShowNewRecord()
-    {
-
-    }
+    void UpdateScoreToUI(int currentScore) => textScore.text = currentScore.ToString("000");
 }

@@ -202,6 +202,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIRoot
       objectReference: {fileID: 0}
+    - target: {fileID: 4253821903822018101, guid: b277a3b2ac7d55b4d8625c9dfb72b6a9, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5171017185969403370, guid: b277a3b2ac7d55b4d8625c9dfb72b6a9, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -285,10 +289,6 @@ PrefabInstance:
     - target: {fileID: 5171017185969403370, guid: b277a3b2ac7d55b4d8625c9dfb72b6a9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6874472830959639321, guid: b277a3b2ac7d55b4d8625c9dfb72b6a9, type: 3}
-      propertyPath: m_Camera
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b277a3b2ac7d55b4d8625c9dfb72b6a9, type: 3}

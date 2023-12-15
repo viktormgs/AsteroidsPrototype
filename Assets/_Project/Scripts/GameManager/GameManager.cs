@@ -44,6 +44,9 @@ public class GameManager : ScreensManager
         OnGameOver += EnemySpawner.instance.EnemySpawnerReset;
 
         OnQuitGame += QuitGame;
+
+        //Starts the game on the main Menu
+        OnGoToMainMenu?.Invoke();
     }
 
     GameObject InstantiateScreen(GameObject gameObject)

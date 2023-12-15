@@ -5,19 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class Boot : MonoBehaviour
 {
-    //[SerializeField] GameObject[] prefabsToInstantiate;
-    //[SerializeField] GameObject[] managersToInstantiate;
-    //[SerializeField] string[] scenesToInstantiate;
+    const int bootScene = 0,
+            gameScene = 1,
+            uiScene = 2;
 
     void Start()
     {
-        SceneManager.LoadScene(1);
-        SceneManager.LoadScene(2, LoadSceneMode.Additive);
+        SceneManager.LoadScene(gameScene);
+        SceneManager.UnloadSceneAsync(gameScene);
+        SceneManager.LoadScene(uiScene, LoadSceneMode.Additive);
     }
-
-    //void InstantiateManager(GameObject gameObject, Transform parent)
-    //{
-    //    var instantiatedGameObject = Instantiate(gameObject, parent);
-    //    if(instantiatedGameObject.activeSelf == false) instantiatedGameObject.SetActive(true);
-    //}
 }
