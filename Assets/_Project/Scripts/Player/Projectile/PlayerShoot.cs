@@ -19,18 +19,24 @@ public class PlayerShoot : PlayerReadInput
     {
         for (int i = 0; i < ammoPoolCapacity; i++)
         {
-            GameObject pooledProjectile = Instantiate(projectile);
-            pooledProjectile.SetActive(false);
+            var pooledProjectile = EnemyGenerator();
 
             ammoQueue.Enqueue(pooledProjectile);
         }
     }
+
+    GameObject EnemyGenerator()
+    {
+        GameObject pooledProjectile = Instantiate(projectile);
+        pooledProjectile.SetActive(false);
+        return pooledProjectile;
+    }
+
     private GameObject GetProjectile()
     {
         if (ammoQueue.Count == 0)
         {
-            GameObject newPooledProjectile = Instantiate(projectile);
-            newPooledProjectile.SetActive(false);
+            var newPooledProjectile = EnemyGenerator();
             ammoQueue.Enqueue(newPooledProjectile);
             return newPooledProjectile;
         }
@@ -51,8 +57,8 @@ public class PlayerShoot : PlayerReadInput
             inUseProjectile = GetProjectile();
             rb = inUseProjectile.GetComponent<Rigidbody2D>();
 
-            //Set Projectile Pos and Rotation
-            inUseProjectile.transform.SetPositionAndRotation(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0), gameObject.transform.rotation); 
+            //Set Projectile Pos and Rotation, Z position is set to always be behind the player
+            inUseProjectile.transform.SetPositionAndRotation(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 1), gameObject.transform.rotation); 
 
             rb.velocity = projectileSpeed * transform.up; //Projectile Movement
 

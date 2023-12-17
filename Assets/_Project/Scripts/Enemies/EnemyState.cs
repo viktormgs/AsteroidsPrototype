@@ -12,7 +12,8 @@ public class EnemyState : MonoBehaviour
     int rotationSpeed;
     [SerializeField] float minSizeForSplit;
     [HideInInspector] public bool isSplitEnemy;
-    EnemySpawner enemySpawner = EnemySpawner.instance;
+    readonly EnemySpawner enemySpawner = EnemySpawner.instance;
+    [SerializeField] ParticleSystem destroyFX;
 
     private void Start()
     {
@@ -62,7 +63,15 @@ public class EnemyState : MonoBehaviour
             gameObject.SetActive(false);
             enemySpawner.enemyQueue.Enqueue(gameObject);
             enemySpawner.activeEnemyList.Remove(gameObject);
-
         }
+        InstantiateFX();
+    }
+
+    void InstantiateFX()
+    {
+        ParticleSystem particleSys = Instantiate(destroyFX);
+        particleSys.gameObject.transform.position = gameObject.transform.position;
+        while (particleSys.isPlaying) return;
+        Destroy(particleSys.gameObject);
     }
 }

@@ -12,7 +12,7 @@ public class ScoreManager : MonoBehaviour
 
     int currentScore;
     const int addScore = 1;
-    int currentRecord;
+    int newRecord;
     public TextMeshProUGUI textScore;
     bool isNewRecord;
 
@@ -43,7 +43,7 @@ public class ScoreManager : MonoBehaviour
         OnEnemyDestroyed += CheckForNewRecord;
 
         ResetIngameScore();
-        PlayerPrefs.GetInt("Highest Score", currentRecord);
+        PlayerPrefs.GetInt("Highest Score", newRecord);
     }
 
     public void EnemyIsDestroyedEvent()
@@ -62,14 +62,19 @@ public class ScoreManager : MonoBehaviour
 
     void CheckForNewRecord()
     {
-        if (currentScore > currentRecord)
+        if (currentScore > newRecord)
         {
-            currentRecord = currentScore;
-            PlayerPrefs.SetInt("Highest Score",currentRecord);
+            newRecord = currentScore;
+            PlayerPrefs.SetInt("Highest Score",newRecord);
             PlayerPrefs.Save();
             if(!isNewRecord) _isNewRecord = true;
         }
     } 
+
+    public int DisplayNewRecordOnMainMenu()
+    {
+        return newRecord;
+    }
 
     void UpdateScoreToUI(int currentScore) => textScore.text = currentScore.ToString("000");
 }

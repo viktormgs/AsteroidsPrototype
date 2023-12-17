@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
 
     Renderer materialRenderer;
     [SerializeField] int invincibilityLifetime = 4;
+    const int respawnTime = 3;
     const int playerLayer = 7;
     const int enemyLayer = 9; 
 
@@ -48,6 +49,8 @@ public class PlayerManager : MonoBehaviour
     IEnumerator Invincibility()
     {
         float flickerRate = .4f;
+
+        //yield return new WaitForSeconds(respawnTime);
         for (int i = 0; i < invincibilityLifetime; i++)
         {
             Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer);

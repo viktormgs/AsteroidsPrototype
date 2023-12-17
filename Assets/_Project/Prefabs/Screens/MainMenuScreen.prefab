@@ -413,6 +413,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5595396551175048959}
   - component: {fileID: 3088670179203764098}
+  - component: {fileID: 53733019594379672}
   - component: {fileID: 2317587478132818052}
   m_Layer: 5
   m_Name: TextRecord
@@ -449,6 +450,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6376541746106417015}
   m_CullTransparentMesh: 1
+--- !u!114 &53733019594379672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6376541746106417015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b55ba379ad3e91d4594d4edefe92cef1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2317587478132818052
 MonoBehaviour:
   m_ObjectHideFlags: 0

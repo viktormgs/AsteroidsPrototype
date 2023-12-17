@@ -46,7 +46,7 @@ public class GameManager : ScreensManager
         OnQuitGame += QuitGame;
 
         //Starts the game on the main Menu
-        OnGoToMainMenu?.Invoke();
+        CallAction(OnGoToMainMenu);
     }
 
     GameObject InstantiateScreen(GameObject gameObject)
@@ -59,6 +59,24 @@ public class GameManager : ScreensManager
     public void CallAction(Action eventToCall)
     {
         eventToCall?.Invoke();
+    }
+
+    void UIHandlerWhenOnMainMenu(Transform parent, bool hide)
+    {
+        if(hide == true)
+        {
+            foreach (Transform childGameObject in parent)
+            {
+                childGameObject.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            foreach (Transform childGameObject in parent)
+            {
+                childGameObject.gameObject.SetActive(true);
+            }
+        }
     }
 
     void QuitGame()
@@ -78,11 +96,22 @@ public class GameManager : ScreensManager
     }
 
     void GameOverScreen() => ShowScreen(gameOverScreen, true);
-    void MainMenuScreen() => ShowScreen(mainMenuScreen, true);
+
+    void MainMenuScreen()
+    {
+        UIHandlerWhenOnMainMenu(ScoreManager.instance.gameObject.transform, true);
+        UIHandlerWhenOnMainMenu(LifeManager.instance.gameObject.transform, true);
+        ShowScreen(mainMenuScreen, true);
+    }
 
     void NewGameEvent()
     {
         if (gameOverScreen.activeSelf) HideScreen(gameOverScreen, false);
-        else if (mainMenuScreen.activeSelf) HideScreen(mainMenuScreen, false);
+        else if (mainMenuScreen.activeSelf)
+        {
+            UIHandlerWhenOnMainMenu(ScoreManager.instance.gameObject.transform, false);
+            UIHandlerWhenOnMainMenu(LifeManager.instance.gameObject.transform, false);
+            HideScreen(mainMenuScreen, false);
+        }
     }
 }
