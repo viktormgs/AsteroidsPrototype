@@ -13,4 +13,6 @@ V-Game Manager Events for scoring and lives
 Score System NewRecord
 Add VHS-like Shader 
 
+Check New Record text and score manager player prefs
+
 

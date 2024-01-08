@@ -26,6 +26,7 @@ public class EnemyTypeManager : MonoBehaviour
             CurrentEnemyLvl(lvlIndex);
             yield return new WaitForSeconds(timeForNextLevel);
             lvlIndex++;
+            Debug.Log("Level" + lvlIndex.ToString() + "starts now");
         }
         yield break;
     }

@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
     public static GameObject enemy;
     const int enemyPoolSize = 3;
     public readonly Queue<GameObject> enemyQueue = new();
-    public List<GameObject> activeEnemyList = new();
+    [HideInInspector] public List<GameObject> activeEnemyList = new();
     GameObject inUseEnemy;
 
     float cameraHalfHeight;
@@ -45,7 +45,7 @@ public class EnemySpawner : MonoBehaviour
         enemyQueue.Enqueue(enemyToPool);
     }
 
-    IEnumerator Spawner() //Is Coroutine because can use spawnInterval as time delay
+    IEnumerator Spawner() //It controls the spawnInterval as time delay
     {
         while (true)
         {

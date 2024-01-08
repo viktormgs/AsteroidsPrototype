@@ -10,7 +10,7 @@ public class ScoreManager : MonoBehaviour
     public event Action OnEnemyDestroyed;
     public Action OnIngameNewRecord;
 
-    int currentScore;
+    int currentScore = 0;
     const int addScore = 1;
     int newRecord;
     public TextMeshProUGUI textScore;
@@ -77,4 +77,12 @@ public class ScoreManager : MonoBehaviour
     }
 
     void UpdateScoreToUI(int currentScore) => textScore.text = currentScore.ToString("000");
+
+    public void DebugRecordScore()
+    {
+        Debug.Log("Current High Record: " + newRecord.ToString());
+
+
+
+    }
 }
