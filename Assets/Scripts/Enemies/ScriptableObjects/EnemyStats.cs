@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyStatsLvlx", menuName = "ScriptableObjects/EnemyStats")]
+[CreateAssetMenu(fileName = "EnemyTypeStats", menuName = "ScriptableObjects/Create New Enemy Type")]
 public class EnemyStats : ScriptableObject
 {
-    public int minSpeed;
-    public int maxSpeed;
+    public int minMovementSpeed;
+    public int maxMovementSpeed;
+
     public float minScale;
     public float maxScale;
+
     public float spawnInterval;
+    public int maxLives;
 }

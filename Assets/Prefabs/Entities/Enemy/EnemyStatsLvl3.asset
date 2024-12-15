@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d3ed3adf77757242b18d02553420fc5, type: 3}
-  m_Name: Player Stats
+  m_Script: {fileID: 11500000, guid: dd291aa4253f51c4e91e25bd789f7b15, type: 3}
+  m_Name: EnemyStatsLvl3
   m_EditorClassIdentifier: 
-  movementSpeed: 0
-  rotateSpeed: 0
-  maxAmmo: 0
+  minMovementSpeed: 10
+  maxMovementSpeed: 20
+  minScale: 3
+  maxScale: 5
+  spawnInterval: 2
+  maxLives: 1

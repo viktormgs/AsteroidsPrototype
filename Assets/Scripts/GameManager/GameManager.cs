@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+// Add Logic between is on menu vs is playing for buttons
 public class GameManager : ScreensManager
 {
     public static GameManager instance;
@@ -33,15 +34,15 @@ public class GameManager : ScreensManager
 
         OnPlay += LifeManager.instance.ResetLives;
         OnPlay += ScoreManager.instance.ResetIngameScore;
-        OnPlay += PlayerManager.instance.ResetPosition;
+        //OnPlay += PlayerManager.instance.ResetPosition;
         OnPlay += EnemyTypeManager.instance.DifficultyReset;
         OnPlay += NewGameEvent;
         //add enemyspawner resume?
         OnGoToMainMenu += MainMenuScreen;
-        OnGoToMainMenu += EnemySpawner.instance.EnemySpawnerReset;
+        OnGoToMainMenu += EnemySpawner.instance.ResetSpawner;
 
         OnGameOver += GameOverScreen;
-        OnGameOver += EnemySpawner.instance.EnemySpawnerReset;
+        OnGameOver += EnemySpawner.instance.ResetSpawner;
 
         OnQuitGame += QuitGame;
 

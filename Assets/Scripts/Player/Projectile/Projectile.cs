@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileState : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+public class Projectile : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out EnemyState enemyState))
+        if (other.TryGetComponent(out Enemy enemy))
         {
             gameObject.SetActive(false);
-            enemyState.DestroyEnemy();
-            ScoreManager.instance.EnemyIsDestroyedEvent();
+            enemy.TakeDamage();
         }
     }
 }

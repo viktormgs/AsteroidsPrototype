@@ -6,12 +6,12 @@ public class EnemySpawner : MonoBehaviour
 {
     public static EnemySpawner instance;
 
-    [SerializeField] GameObject gameObjectEnemy;
+    [SerializeField] private GameObject gameObjectEnemy;
     public static GameObject enemy;
-    const int enemyPoolSize = 3;
-    public readonly Queue<GameObject> enemyQueue = new();
-    [HideInInspector] public List<GameObject> activeEnemyList = new();
-    GameObject inUseEnemy;
+    const int enemyPoolSize = 7;
+    private readonly Queue<GameObject> enemyQueue = new();
+    private List<GameObject> activeEnemyList = new();
+    private GameObject inUseEnemy;
 
     float cameraHalfHeight;
     Vector2 screenLimit;
@@ -25,27 +25,29 @@ public class EnemySpawner : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    void Start()
+    private void Start()
     {
         enemy = gameObjectEnemy;
         screenLimit = ScreenBounds.screenLimit;
         cameraHalfHeight = ScreenBounds.cameraHalfHeight;
 
+        GameplayEvents.OnEnemyToDestroy += DisableEnemy;
+
         for (int i = 0; i < enemyPoolSize; i++)
         {
-            EnemyInstantiator();
+            CreateEnemy();
         }
         StartCoroutine(Spawner());
     }
 
-    void EnemyInstantiator()
+    private void CreateEnemy()
     {
         GameObject enemyToPool = Instantiate(enemy, gameObject.transform);
         enemyToPool.SetActive(false);
         enemyQueue.Enqueue(enemyToPool);
     }
 
-    IEnumerator Spawner() //It controls the spawnInterval as time delay
+    private IEnumerator Spawner() //It controls the spawnInterval as time delay
     {
         while (true)
         {
@@ -58,11 +60,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    GameObject GetEnemy()
+    private GameObject GetEnemy()
     {
         if (enemyQueue.Count == 0)
         {
-            EnemyInstantiator();
+            CreateEnemy();
         }
 
         GameObject pooledEnemy = enemyQueue.Dequeue();
@@ -77,34 +79,61 @@ public class EnemySpawner : MonoBehaviour
 
         return side switch
         {
-            //top
+            // Top
             0 => new Vector2(Random.Range(-screenLimit.x, screenLimit.x), cameraHalfHeight),
-            //Bottom
+            // Bottom
             1 => new Vector2(Random.Range(-screenLimit.x, screenLimit.x), -cameraHalfHeight),
-            //Left
+            // Left
             2 => new Vector2(-screenLimit.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
-            //Right
+            // Right
             _ => new Vector2(screenLimit.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
         };
     }
 
-    public void SplitEnemies(Vector2 pos, Quaternion rotation, Vector2 scale, Vector2 direction)
+    private void DisableEnemy(Enemy enemy)
     {
-        for (int i = 0; i < 2; i++)
+        enemy.gameObject.SetActive(false);
+        enemyQueue.Enqueue(enemy.gameObject);
+        activeEnemyList.Remove(enemy.gameObject);
+    }
+
+    public void SplitIntoEnemies(Vector2 pos, Vector2 scale, Vector2 direction)
+    {
+        int amountOfEnemies = Random.Range(2, 5); // Flexible number of enemies (e.g., 2 to 4)
+        float angleStep = 360f / amountOfEnemies; // Angle between split enemies
+
+        for (int i = 0; i < amountOfEnemies; i++)
         {
             var smallEnemy = GetEnemy();
-            smallEnemy.transform.SetPositionAndRotation(pos, rotation);
+            smallEnemy.transform.position = pos;
             smallEnemy.transform.localScale = scale * .5f;
 
-            var enemyState = smallEnemy.GetComponent<EnemyState>();
+            smallEnemy.TryGetComponent(out Enemy enemyState);
             enemyState.isSplitEnemy = true;
 
-            var enemyDirectionToCenter = i == 0 ? Vector2.Perpendicular(direction) : -Vector2.Perpendicular(direction);
-            enemyState.SetScaleAndDirection(enemyDirectionToCenter, smallEnemy.transform.localScale);
+            // Calculate direction for each enemy
+            float angle = angleStep * i; // Angle for this enemy
+            Vector2 enemyDirection = RotateVector(direction, angle);
+            enemyState.SetDirectionAndScale(enemyDirection, smallEnemy.transform.localScale);
         }
     }
 
-    public void EnemySpawnerReset()
+    // Helper function to rotate a vector by a given angle (in degrees)
+    private Vector2 RotateVector(Vector2 vector, float angle)
+    {
+        float radians = angle * Mathf.Deg2Rad; // Convert degrees to radians
+        float cos = Mathf.Cos(radians);
+        float sin = Mathf.Sin(radians);
+
+        // Apply rotation matrix
+        return new Vector2(
+            vector.x * cos - vector.y * sin,
+            vector.x * sin + vector.y * cos
+        );
+    }
+
+
+    public void ResetSpawner() // MAKE PRIVATE !!
     {
         foreach (GameObject activeEnemy in activeEnemyList)
         {

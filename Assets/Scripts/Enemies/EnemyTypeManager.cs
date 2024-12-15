@@ -5,22 +5,16 @@ using UnityEngine;
 public class EnemyTypeManager : MonoBehaviour
 {
     public static EnemyTypeManager instance;
-
     [SerializeField] EnemyStats[] enemyLvlArray;
     public static EnemyStats currentEnemyLvl;
-    int lvlIndex;
     [SerializeField] float timeForNextLevel;
 
-    void Awake()
-    {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
-    }
+
     void Start() => StartCoroutine(LevelUpEnemyType());
 
     IEnumerator LevelUpEnemyType()
     {
-        lvlIndex = 0;
+        int lvlIndex = 0;
         while (lvlIndex < enemyLvlArray.Length)
         {
             CurrentEnemyLvl(lvlIndex);

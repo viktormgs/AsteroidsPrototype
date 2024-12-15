@@ -2,89 +2,119 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShoot : PlayerReadInput
+[RequireComponent(typeof(Player))]
+
+// This Script is added as component on Start() when player is instantiated.
+// More info in Player.cs
+public class PlayerShoot : MonoBehaviour
 {
-    [SerializeField] GameObject projectile;
-    [SerializeField] float projectileSpeed;
-    [SerializeField] float projectileLifetime;
-    [SerializeField] int ammoPoolCapacity;
-    Rigidbody2D rb;
-    GameObject inUseProjectile;
-    bool canShoot = true;
-    [SerializeField] float attackSpeed;
-    readonly Queue<GameObject> ammoQueue = new();
+    private GameObject projectile;
+    private static GameObject projectileGroup; // Used to group things and keep scene's hierarchy clean
+    private Rigidbody2D rb;
+    
+    // Stats
+    private float projectileSpeed;
+    private float lifeTime;
+    private float shootingSpeed;
 
-    // Start is called before the first frame update
-    void Start()
+    private static bool canShoot = true;
+    private const int maxAmountOfProjectiles = 7; // Assuming the average amount of max projectiles on screen
+    private readonly Queue<GameObject> projectilePool = new();
+
+    public void Initialize(float projectileSpeed, float lifeTime, float shootingSpeed, GameObject projectile)
     {
-        for (int i = 0; i < ammoPoolCapacity; i++)
-        {
-            var pooledProjectile = EnemyGenerator();
+        this.projectileSpeed = projectileSpeed;
+        this.lifeTime = lifeTime;
+        this.shootingSpeed = shootingSpeed;
+        this.projectile = projectile;
 
-            ammoQueue.Enqueue(pooledProjectile);
+        projectileGroup = new();
+        SetupProjectiles();
+    }
+
+    private void SetupProjectiles()
+    {
+        GameplayEvents.OnPlayerShoot += Shoot;
+
+        if (projectileGroup == null) projectileGroup = Instantiate(projectileGroup);
+        
+        CreateProjectilePool();
+
+    }
+
+    private void CreateProjectilePool() // To easily re-use instantiated projectiles
+    {
+        for (int i = 0; i < maxAmountOfProjectiles; i++)
+        {
+            var newProjectile = CreateProjectile();
+
+            projectilePool.Enqueue(newProjectile);
         }
     }
 
-    GameObject EnemyGenerator()
+    private GameObject CreateProjectile()
     {
-        GameObject pooledProjectile = Instantiate(projectile);
+        GameObject pooledProjectile = Instantiate(projectile, projectileGroup.transform);
         pooledProjectile.SetActive(false);
         return pooledProjectile;
     }
 
     private GameObject GetProjectile()
     {
-        if (ammoQueue.Count == 0)
+        // Creates a projectile if there are no available projectiles in the pool
+        if (projectilePool.Count == 0) 
         {
-            var newPooledProjectile = EnemyGenerator();
-            ammoQueue.Enqueue(newPooledProjectile);
-            return newPooledProjectile;
+            var newProjectile = CreateProjectile();
+            projectilePool.Enqueue(newProjectile);
+            return newProjectile;
         }
 
-        GameObject pooledProjectile = ammoQueue.Dequeue();
+        GameObject pooledProjectile = projectilePool.Dequeue();
+        pooledProjectile.TryGetComponent(out rb); // Need this because it uses physics (velocity) to move
         pooledProjectile.SetActive(true);
 
         return pooledProjectile;
     }
 
-    private void Update() => Fire();
-
-    void Fire()
+    private void Shoot()
     {
-        if (fire && canShoot)
+        if (canShoot)
         {
-            StartCoroutine(AttackSpeed());
-            inUseProjectile = GetProjectile();
-            rb = inUseProjectile.GetComponent<Rigidbody2D>();
+            StartCoroutine(ShootingSpeed());
+            var projectileInUse = GetProjectile();
 
-            //Set Projectile Pos and Rotation, Z position is set to always be behind the player
-            inUseProjectile.transform.SetPositionAndRotation(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 1), gameObject.transform.rotation); 
+            // Z-Position is set to always be behind the player otherwise it doesn't look good
+            projectileInUse.transform.SetPositionAndRotation(new Vector3
+                (gameObject.transform.position.x, gameObject.transform.position.y, 
+                gameObject.transform.position.z + 1), gameObject.transform.rotation); 
 
             rb.velocity = projectileSpeed * transform.up; //Projectile Movement
 
-            //Call Projectile lifetime
-            StartCoroutine(ProjectileLifetime(inUseProjectile));
+            // Call Projectile lifetime
+            StartCoroutine(ProjectileLifetime(projectileInUse));
+        }
+
+        // Coroutines embedded into the method because they are not supposed to be called from anywhere else.
+        IEnumerator ProjectileLifetime(GameObject inUseProjectile)
+        {
+            yield return new WaitForSeconds(lifeTime);
+            DisableProjectile(inUseProjectile);
+            yield break;
+        }
+
+        // Easiest way I can think of setting up Attack Speed without having to use Update();
+        IEnumerator ShootingSpeed()
+        {
+            canShoot = false;
+            yield return new WaitForSeconds(shootingSpeed);
+            canShoot = true;
+            yield break;
         }
     }
 
-    IEnumerator ProjectileLifetime(GameObject inUseProjectile)
+    private void DisableProjectile(GameObject projectileInUse)
     {
-        yield return new WaitForSeconds(projectileLifetime);
-        DisableProjectile(inUseProjectile);
-        yield break;
-    }
-
-    IEnumerator AttackSpeed()
-    {
-        canShoot = false;
-        yield return new WaitForSeconds(attackSpeed);
-        canShoot = true;
-        yield break;
-    }
-
-    public void DisableProjectile(GameObject inUseProjectile)
-    {
-        inUseProjectile.SetActive(false);
-        ammoQueue.Enqueue(inUseProjectile);
+        projectileInUse.SetActive(false);
+        projectilePool.Enqueue(projectileInUse);
     }
 }
