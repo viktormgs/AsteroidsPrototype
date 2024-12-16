@@ -4,34 +4,26 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public static EnemySpawner instance;
+    public static EnemySpawner instance; // REVIEW THIS
 
-    [SerializeField] private GameObject gameObjectEnemy;
-    public static GameObject enemy;
-    const int enemyPoolSize = 7;
+    [SerializeField] private Enemy enemy;
+    private const float minSizeForSplit = 3.2f;
+
+    private const int enemyPoolSize = 7;
     private readonly Queue<GameObject> enemyQueue = new();
-    private List<GameObject> activeEnemyList = new();
-    private GameObject inUseEnemy;
+    private readonly List<GameObject> activeEnemyList = new();
 
-    float cameraHalfHeight;
-    Vector2 screenLimit;
-
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else Destroy(gameObject);
-    }
+    private float cameraHalfHeight; // REVIEW THIS
+    private Vector2 screenLimit;
 
     private void Start()
     {
-        enemy = gameObjectEnemy;
         screenLimit = ScreenBounds.screenLimit;
         cameraHalfHeight = ScreenBounds.cameraHalfHeight;
 
         GameplayEvents.OnEnemyToDestroy += DisableEnemy;
+        GameplayEvents.OnEnemyToDestroy += Split;
+
 
         for (int i = 0; i < enemyPoolSize; i++)
         {
@@ -39,25 +31,24 @@ public class EnemySpawner : MonoBehaviour
         }
         StartCoroutine(Spawner());
     }
-
-    private void CreateEnemy()
-    {
-        GameObject enemyToPool = Instantiate(enemy, gameObject.transform);
-        enemyToPool.SetActive(false);
-        enemyQueue.Enqueue(enemyToPool);
-    }
-
     private IEnumerator Spawner() //It controls the spawnInterval as time delay
     {
         while (true)
         {
             Vector2 spawnPos = GetRandomPos();
 
-            inUseEnemy = GetEnemy();
-            inUseEnemy.transform.position = spawnPos;
+            GameObject enemyInUse = GetEnemy();
+            enemyInUse.transform.position = spawnPos;
 
-            yield return new WaitForSeconds(EnemyTypeManager.currentEnemyLvl.spawnInterval);
+            yield return new WaitForSeconds(RoundsManager.currentEnemyLevel.spawnInterval);
         }
+    }
+
+    private void CreateEnemy()
+    {
+        GameObject enemyToPool = Instantiate(enemy.gameObject, gameObject.transform);
+        enemyToPool.SetActive(false);
+        enemyQueue.Enqueue(enemyToPool);
     }
 
     private GameObject GetEnemy()
@@ -97,23 +88,27 @@ public class EnemySpawner : MonoBehaviour
         activeEnemyList.Remove(enemy.gameObject);
     }
 
-    public void SplitIntoEnemies(Vector2 pos, Vector2 scale, Vector2 direction)
+    private void Split(Enemy enemy)
     {
+        // How big the enemy is will determine how many times will it be split
+        if (transform.localScale.x < minSizeForSplit) return;
+
+
         int amountOfEnemies = Random.Range(2, 5); // Flexible number of enemies (e.g., 2 to 4)
         float angleStep = 360f / amountOfEnemies; // Angle between split enemies
 
         for (int i = 0; i < amountOfEnemies; i++)
         {
             var smallEnemy = GetEnemy();
-            smallEnemy.transform.position = pos;
-            smallEnemy.transform.localScale = scale * .5f;
+            smallEnemy.transform.position = enemy.gameObject.transform.position;
+            smallEnemy.transform.localScale = enemy.gameObject.transform.localScale * .5f; // Child asteroids are half size
 
             smallEnemy.TryGetComponent(out Enemy enemyState);
-            enemyState.isSplitEnemy = true;
+            enemyState.SetIsASplitEnemy();
 
             // Calculate direction for each enemy
             float angle = angleStep * i; // Angle for this enemy
-            Vector2 enemyDirection = RotateVector(direction, angle);
+            Vector2 enemyDirection = RotateVector(Vector2.zero, angle);
             enemyState.SetDirectionAndScale(enemyDirection, smallEnemy.transform.localScale);
         }
     }
@@ -131,7 +126,6 @@ public class EnemySpawner : MonoBehaviour
             vector.x * sin + vector.y * cos
         );
     }
-
 
     public void ResetSpawner() // MAKE PRIVATE !!
     {

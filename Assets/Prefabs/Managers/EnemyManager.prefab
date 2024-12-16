@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7023746784486419897}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5670010203295070068
 MonoBehaviour:
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6145472d63e3fe64980bdd87e72a1663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectEnemy: {fileID: 7089528742566300567, guid: ff3900dd8874aa949bf0aa9e7c08372f, type: 3}
+  enemy: {fileID: 8805994259449857272, guid: ff3900dd8874aa949bf0aa9e7c08372f, type: 3}
 --- !u!114 &1363626222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,5 +62,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f8b27571778dd304a87f9c94fe57edfd, type: 2}
   - {fileID: 11400000, guid: 1563b9f5b8fc5674eb632d74bb2a1ce8, type: 2}
   - {fileID: 11400000, guid: 464746397a7443e4ba247f4e1f4ea0ab, type: 2}
-  - {fileID: 11400000, guid: e8dc44ff363c0f042b4ca3a9ea13cd1e, type: 2}
   timeForNextLevel: 7

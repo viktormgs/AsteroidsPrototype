@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minMovementSpeed: 10
   maxMovementSpeed: 20
-  minScale: 2
-  maxScale: 5
-  spawnInterval: 5
+  minScale: 3.2
+  maxScale: 6
+  spawnInterval: 6
   maxLives: 1

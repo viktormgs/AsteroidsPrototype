@@ -35,7 +35,7 @@ public class GameManager : ScreensManager
         OnPlay += LifeManager.instance.ResetLives;
         OnPlay += ScoreManager.instance.ResetIngameScore;
         //OnPlay += PlayerManager.instance.ResetPosition;
-        OnPlay += EnemyTypeManager.instance.DifficultyReset;
+        OnPlay += RoundsManager.instance.DifficultyReset;
         OnPlay += NewGameEvent;
         //add enemyspawner resume?
         OnGoToMainMenu += MainMenuScreen;

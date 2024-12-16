@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
 {
-    [SerializeField] Button retry;
-    [SerializeField] Button exit;
-    readonly GameManager gameManager = GameManager.instance;
+    [SerializeField] private Button retryButton;
+    [SerializeField] private Button exitButton;
+    private readonly GameManager gameManager = GameManager.instance;
 
     void Start()
     {
-        retry.onClick.AddListener(Retry);
-        exit.onClick.AddListener(Exit);
+        retryButton.onClick.AddListener(Retry);
+        exitButton.onClick.AddListener(Exit);
     }
 
     void Retry() => gameManager.CallAction(gameManager.OnPlay);

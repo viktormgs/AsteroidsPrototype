@@ -6,35 +6,44 @@ public class Enemy : Entity
 {
     private int randomSpeed;
     private Vector2 directionToCenter;
-    private int randomOrientation;
     private Vector3 randomRotation;
-    [SerializeField] private float minSizeForSplit;
-    [HideInInspector] public bool isSplitEnemy;
-    readonly EnemySpawner enemySpawner = EnemySpawner.instance;
-    [SerializeField] private ParticleSystem destroyFX;
+
+    private readonly int minMovementSpeed;
+    private readonly int maxMovementSpeed;
+    private readonly float minScale;
+    private readonly float maxScale;
+    
+    private bool isSplitEnemy;
 
     public Enemy(int minMovementSpeed, int maxMovementSpeed, float minScale, float maxScale, int maxLives)
     {
-        // TO DO
+        this.minMovementSpeed = minMovementSpeed;
+        this.maxMovementSpeed = maxMovementSpeed;
+        this.minScale = minScale;
+        this.maxScale = maxScale;
+        this.maxScale = maxScale;
         ResetLives(maxLives);
     }
+
 
     protected override void Start()
     {
         base.Start();
-        var currentEnemyLvl = EnemyTypeManager.currentEnemyLvl;
-        float randomScale = Random.Range(currentEnemyLvl.minScale, currentEnemyLvl.maxScale);
-        randomSpeed = Random.Range(currentEnemyLvl.minMovementSpeed, currentEnemyLvl.maxMovementSpeed);
-        randomOrientation = Random.Range(0, 1) * 2 - 1; //Allows the enemy to rotate one direction or the other
+        float randomScale = Random.Range(minScale, maxScale);
+        randomSpeed = Random.Range(minMovementSpeed, maxMovementSpeed);
         rotateSpeed = Random.Range(0, 500);
+
+        // Allows the enemy to rotate one direction or the other
+        int randomOrientation = Random.Range(0, 1) * 2 - 1; 
         randomRotation = new Vector3(0, 0, randomOrientation);
         
-        if (isSplitEnemy == false)
-        {
-            SetDirectionAndScale((Vector2.zero - (Vector2)transform.position).normalized, new Vector2(randomScale, randomScale));
-        }
+
+        if (isSplitEnemy == true) return;
+
+        SetDirectionAndScale((Vector2.zero - (Vector2)transform.position).normalized, new Vector2(randomScale, randomScale));
     }
 
+    public void SetIsASplitEnemy() => isSplitEnemy = true;
     public void SetDirectionAndScale(Vector2 direction, Vector2 scale)
     {
         directionToCenter = direction;
@@ -52,12 +61,6 @@ public class Enemy : Entity
 
     protected override void DestroyEntity()
     {
-        // How big the enemy is will determine how many times will it be split
-        if (transform.localScale.x >= minSizeForSplit)
-        {
-            // Think about how to improve this !!!
-            enemySpawner.SplitIntoEnemies(gameObject.transform.position, gameObject.transform.localScale, directionToCenter);
-        }
         GameplayEvents.InvokeOnEnemyToDestroy(this);
         GameplayEvents.InvokeOnEnemyIsDestroyed();
     }
