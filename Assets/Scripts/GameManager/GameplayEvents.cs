@@ -10,6 +10,6 @@ public static class GameplayEvents
 
     public static void InvokePlayerShooting() => OnPlayerShoot?.Invoke();
     public static void InvokePlayerIsDamaged() => OnPlayerIsDamaged?.Invoke();
-    public static void InvokeOnEnemyToDestroy(Enemy enemy) => OnEnemyToDestroy?.Invoke(enemy);
-    public static void InvokeOnEnemyIsDestroyed() => OnEnemyIsDestroyed?.Invoke();
+    public static void InvokeEnemyToDestroy(Enemy enemy) => OnEnemyToDestroy?.Invoke(enemy);
+    public static void InvokeEnemyIsDestroyed() => OnEnemyIsDestroyed?.Invoke();
 }

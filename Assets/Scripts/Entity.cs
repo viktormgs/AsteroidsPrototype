@@ -11,7 +11,17 @@ public abstract class Entity : MonoBehaviour
     
     protected Rigidbody2D rb;
     [SerializeField] protected ParticleSystem damagedFX;
+    protected Coroutine fXPlaying;
 
+    public virtual int CurrentLives 
+    { 
+        get => currentLives; 
+        protected set
+        {
+            if(value < 0) value = 0;
+            currentLives = value;
+        }
+    }
 
     protected virtual void Start()
     {
@@ -27,24 +37,37 @@ public abstract class Entity : MonoBehaviour
 
     public virtual void TakeDamage()
     {
-        currentLives--;
-        if (!damagedFX.gameObject.activeSelf) damagedFX.gameObject.SetActive(true);
-        if (HasMoreLives()) return;
-
-        DestroyEntity();
+        CurrentLives--;
+        PlayDamagedFX();
     }
 
-    private bool HasMoreLives()
+    protected bool HasMoreLives()
     {
-        if (currentLives > 0) return true;
+        if (CurrentLives > 0) return true;
         else
         {
-            currentLives = 0;
+            CurrentLives = 0;
             return false;
         }
     }
 
-    protected void ResetLives(int maxLives) => currentLives = maxLives;
+
+    protected void PlayDamagedFX()
+    {
+        if (!damagedFX.gameObject.activeSelf) damagedFX.gameObject.SetActive(false);
+        damagedFX.gameObject.SetActive(true);
+
+        fXPlaying = StartCoroutine(WaitForFX());
+        IEnumerator WaitForFX() // To make sure there are no particles disappearing before destroying the GameObject
+        {
+            while (damagedFX.IsAlive()) yield return null;
+            damagedFX.gameObject.SetActive(false);
+            yield break;
+        }
+        fXPlaying = null;
+    }
+
+    protected void ResetLives(int maxLives) => CurrentLives = maxLives;
 
     protected abstract void DestroyEntity();
 

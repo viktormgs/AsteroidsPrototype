@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2851654904515057230}
   - component: {fileID: 5670010203295070068}
   - component: {fileID: 1363626222}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EnemyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,8 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9abdd7a63f4285445aa5777ce1540598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyLvlArray:
+  enemyLevels:
   - {fileID: 11400000, guid: f8b27571778dd304a87f9c94fe57edfd, type: 2}
   - {fileID: 11400000, guid: 1563b9f5b8fc5674eb632d74bb2a1ce8, type: 2}
   - {fileID: 11400000, guid: 464746397a7443e4ba247f4e1f4ea0ab, type: 2}
-  timeForNextLevel: 7

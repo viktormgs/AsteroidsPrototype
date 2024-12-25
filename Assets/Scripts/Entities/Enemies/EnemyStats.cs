@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyTypeStats", menuName = "ScriptableObjects/Create New Enemy Type")]
+[CreateAssetMenu(fileName = "EnemyStats", menuName = "ScriptableObjects/Create New Enemy Stats")]
 public class EnemyStats : ScriptableObject
 {
     public int minMovementSpeed;

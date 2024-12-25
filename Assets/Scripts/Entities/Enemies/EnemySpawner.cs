@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public static EnemySpawner instance; // REVIEW THIS
-
     [SerializeField] private Enemy enemy;
     private const float minSizeForSplit = 3.2f;
 
@@ -13,25 +11,43 @@ public class EnemySpawner : MonoBehaviour
     private readonly Queue<GameObject> enemyQueue = new();
     private readonly List<GameObject> activeEnemyList = new();
 
-    private float cameraHalfHeight; // REVIEW THIS
+    private float cameraHalfHeight;
     private Vector2 screenLimit;
+    private Coroutine spawner = null;
 
     private void Start()
     {
-        screenLimit = ScreenBounds.screenLimit;
-        cameraHalfHeight = ScreenBounds.cameraHalfHeight;
+        // Assigning these two here to keep the code more readable
+        screenLimit = ScreenBorders.ScreenSize; 
+        cameraHalfHeight = ScreenBorders.CameraHalfHeight;
 
         GameplayEvents.OnEnemyToDestroy += DisableEnemy;
         GameplayEvents.OnEnemyToDestroy += Split;
+        GameManagerEvents.OnStartPlay += Initialize;
+        GameManagerEvents.OnExitGame += ResetSpawner;
+    }
 
+    private void OnDestroy()
+    {
+        GameplayEvents.OnEnemyToDestroy -= DisableEnemy;
+        GameplayEvents.OnEnemyToDestroy = Split;
+        GameManagerEvents.OnStartPlay -= Initialize;
+        GameManagerEvents.OnExitGame -= ResetSpawner;
+    }
+
+    private void Initialize()
+    {
+        if (spawner != null) StopCoroutine(spawner);
 
         for (int i = 0; i < enemyPoolSize; i++)
         {
             CreateEnemy();
         }
-        StartCoroutine(Spawner());
+        spawner = StartCoroutine(Spawner());
     }
-    private IEnumerator Spawner() //It controls the spawnInterval as time delay
+
+    // Controls the enemy spawn rate given by the current difficulty
+    private IEnumerator Spawner() 
     {
         while (true)
         {
@@ -40,7 +56,7 @@ public class EnemySpawner : MonoBehaviour
             GameObject enemyInUse = GetEnemy();
             enemyInUse.transform.position = spawnPos;
 
-            yield return new WaitForSeconds(RoundsManager.currentEnemyLevel.spawnInterval);
+            yield return new WaitForSeconds(RoundsManager.CurrentEnemyLevel.spawnInterval);
         }
     }
 
@@ -53,14 +69,16 @@ public class EnemySpawner : MonoBehaviour
 
     private GameObject GetEnemy()
     {
-        if (enemyQueue.Count == 0)
-        {
-            CreateEnemy();
-        }
+        if (enemyQueue.Count == 0) CreateEnemy();
 
         GameObject pooledEnemy = enemyQueue.Dequeue();
+       
+        pooledEnemy.TryGetComponent(out Enemy enemy);
+        AssignStats(enemy);
+
         pooledEnemy.SetActive(true);
         activeEnemyList.Add(pooledEnemy);
+
         return pooledEnemy;
     }
 
@@ -81,6 +99,16 @@ public class EnemySpawner : MonoBehaviour
         };
     }
 
+
+    private void AssignStats(Enemy enemy)
+    {
+        enemy.AssignStats(
+            RoundsManager.CurrentEnemyLevel.minMovementSpeed, RoundsManager.CurrentEnemyLevel.maxMovementSpeed, // Speed 
+            RoundsManager.CurrentEnemyLevel.minScale, RoundsManager.CurrentEnemyLevel.maxScale, // Scale
+            RoundsManager.CurrentEnemyLevel.maxLives); // Lives
+    }
+
+
     private void DisableEnemy(Enemy enemy)
     {
         enemy.gameObject.SetActive(false);
@@ -94,14 +122,16 @@ public class EnemySpawner : MonoBehaviour
         if (transform.localScale.x < minSizeForSplit) return;
 
 
-        int amountOfEnemies = Random.Range(2, 5); // Flexible number of enemies (e.g., 2 to 4)
+        int amountOfEnemies = Random.Range(2, 5); // Flexible number of enemy children (e.g., 2 to 5)
         float angleStep = 360f / amountOfEnemies; // Angle between split enemies
 
         for (int i = 0; i < amountOfEnemies; i++)
         {
             var smallEnemy = GetEnemy();
+
+            // Child asteroids are half the size of the parent
+            smallEnemy.transform.localScale = enemy.gameObject.transform.localScale * .5f; 
             smallEnemy.transform.position = enemy.gameObject.transform.position;
-            smallEnemy.transform.localScale = enemy.gameObject.transform.localScale * .5f; // Child asteroids are half size
 
             smallEnemy.TryGetComponent(out Enemy enemyState);
             enemyState.SetIsASplitEnemy();
@@ -123,11 +153,10 @@ public class EnemySpawner : MonoBehaviour
         // Apply rotation matrix
         return new Vector2(
             vector.x * cos - vector.y * sin,
-            vector.x * sin + vector.y * cos
-        );
+            vector.x * sin + vector.y * cos);
     }
 
-    public void ResetSpawner() // MAKE PRIVATE !!
+    private void ResetSpawner()
     {
         foreach (GameObject activeEnemy in activeEnemyList)
         {

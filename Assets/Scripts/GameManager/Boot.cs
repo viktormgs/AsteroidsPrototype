@@ -5,14 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class Boot : MonoBehaviour
 {
-    const int bootScene = 0,
-            gameScene = 1,
-            uiScene = 2;
+    private const int bootIndex = 0;
+    private const int gameIndex = 1;
+        
+    private void Awake() => StartCoroutine(LoadGameScene());
 
-    void Start()
+    private IEnumerator LoadGameScene()
     {
-        SceneManager.LoadScene(gameScene);
-        SceneManager.UnloadSceneAsync(gameScene);
-        SceneManager.LoadScene(uiScene, LoadSceneMode.Additive);
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(gameIndex, LoadSceneMode.Additive);
+        while (!loadOperation.isDone) // Need to wait because I need a different active scene to set
+        {
+            yield return null;
+        }
+
+        // Needed to instantiate stuff into this scene
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(gameIndex)); 
+
+        SceneManager.UnloadSceneAsync(bootIndex); // Will never use Boot while the game is running
+        // No need to break the Coroutine, unloading the scene will stop it
     }
 }

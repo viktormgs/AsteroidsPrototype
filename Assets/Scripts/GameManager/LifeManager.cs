@@ -5,44 +5,45 @@ using System;
 
 public class LifeManager : MonoBehaviour
 {
-    public static LifeManager instance;
-    public event Action OnDeath;
+    [SerializeField] private GameObject life;
+    private readonly GameObject[] lives;
 
-    int currentLife;
-    const int damage = 1;
-    [SerializeField] GameObject[] lifeSprite;
-
-    void Awake()
-    {
-        if (instance == null) instance = this;
-        else if (instance != this) Destroy(gameObject);
-    }
+    private int CurrentLives => GameManager.Player.CurrentLives;
 
     private void Start()
     {
-        ResetLives();
-        OnDeath += RemoveLife;
+        GameManagerEvents.OnStartPlay += Initialize;
+        GameManagerEvents.OnStartPlay += ResetLives;
+        GameplayEvents.OnPlayerIsDamaged += RemoveLife;
     }
 
-    void RemoveLife()
+    private void OnDestroy()
     {
-        if (currentLife > -1)
+        GameManagerEvents.OnStartPlay -= Initialize;
+        GameManagerEvents.OnStartPlay -= ResetLives;
+        GameplayEvents.OnPlayerIsDamaged -= RemoveLife;
+    }
+
+    private void Initialize()
+    {
+        for (int i = 0; i < CurrentLives - 1; i++)
         {
-            currentLife -= damage;
-            lifeSprite[currentLife].SetActive(false);
-        }
-        if (currentLife == 0)
-        {
-            GameManager.instance.CallAction(GameManager.instance.OnGameOver);
+            lives[i] = Instantiate(life, gameObject.transform);
+            ResetLives(); // This ensures all active lives are enabled
         }
     }
 
-    public void ResetLives() 
+    private void RemoveLife()
     {
-        currentLife = lifeSprite.Length;
-        for (int i = 0; i < lifeSprite.Length; i++)
+        // Can be changed to trigger VFX if needed fancier visual representation
+        lives[CurrentLives - 1].SetActive(false); 
+    }
+
+    private void ResetLives()
+    {
+        for (int i = 0; i < CurrentLives; i++)
         {
-            lifeSprite[i].SetActive(true);
+            if (!lives[i].activeSelf) lives[i].SetActive(true);
         }
     }
 }

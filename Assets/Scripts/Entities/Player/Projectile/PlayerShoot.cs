@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Player))]
 
-// This Script is added as component on Start() when player is instantiated.
+// This Script is added as a component on Start() when player is instantiated.
 // More info in Player.cs
 public class PlayerShoot : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class PlayerShoot : MonoBehaviour
     private float lifeTime;
     private float shootingSpeed;
 
-    private static bool canShoot = true;
+    private bool canShoot = true;
     private const int maxAmountOfProjectiles = 7; // Assuming the average amount of max projectiles on screen
     private readonly Queue<GameObject> projectilePool = new();
 
@@ -28,7 +28,7 @@ public class PlayerShoot : MonoBehaviour
         this.shootingSpeed = shootingSpeed;
         this.projectile = projectile;
 
-        projectileGroup = new();
+        projectileGroup = new("Projectiles");
         SetupProjectiles();
     }
 

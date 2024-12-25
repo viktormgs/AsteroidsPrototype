@@ -8,6 +8,15 @@ public class Player : Entity
     [SerializeField] private GameObject projectile;
     private PlayerShoot playerShoot;
 
+    public override int CurrentLives
+    {
+        get => base.CurrentLives;
+        protected set
+        {
+            base.CurrentLives = value;
+            // Do something to send to life manager ????
+        }
+    }
 
     private Renderer materialRenderer;
     private readonly int invincibilityLifetime = 4;
@@ -18,24 +27,31 @@ public class Player : Entity
     protected override void Start()
     {
         base.Start();
-        ResetLives(playerStats.maxLives);
-        movementSpeed = playerStats.movementSpeed;
-        rotateSpeed = playerStats.rotateSpeed;
 
         GameplayEvents.OnPlayerIsDamaged += TakeDamage;
+        GameManagerEvents.OnGameOver += DestroyEntity;
+
         TryGetComponent(out materialRenderer); // Needed for visual flickering
 
         // Added the component like this because all relevant data comes from PlayerStats,
         // also, cleaner in the Inspector because there are no fields to expose from PlayerShoot Class.
         playerShoot = gameObject.AddComponent<PlayerShoot>(); 
         playerShoot.Initialize(playerStats.projectileSpeed, playerStats.lifeTime, playerStats.shootingSpeed, projectile);
+        Initialize();
+    }
 
+    private void Initialize()
+    {
+        ResetLives(playerStats.maxLives);
+        movementSpeed = playerStats.movementSpeed;
+        rotateSpeed = playerStats.rotateSpeed;
     }
 
     protected override void Movement()
     {
-        var playerDirection = new Vector2(Inputs.horizontalInput, Inputs.verticalInput);
+        var playerDirection = new Vector2(Inputs.HorizontalInput, Inputs.VerticalInput);
         rb.AddForce(movementSpeed * playerDirection); // AddForce gives a more realistic feeling when moving
+
 
         if (playerDirection != Vector2.zero) //Rotate player towards direction
         {
@@ -48,7 +64,6 @@ public class Player : Entity
     {
         if (other.TryGetComponent(out Enemy enemy))
         {
-
             enemy.TakeDamage();
             GameplayEvents.InvokePlayerIsDamaged();
         }
@@ -57,14 +72,18 @@ public class Player : Entity
     public override void TakeDamage()
     {
         base.TakeDamage();
-        StartCoroutine(Respawn());
+        if(HasMoreLives()) StartCoroutine(Respawn());
+
+        else GameManagerEvents.InvokeOnGameOver();
     }
+
     private IEnumerator Respawn()
     {
         float flickerRate = .4f; // For Player visual flickering effect
         materialRenderer.enabled = false;
 
-        StartCoroutine(WaitForFX());
+        // Gives a bit of time so the player doesn't instantly respawn
+        while (fXPlaying != null) yield return null; 
 
         transform.position = Vector2.zero;
 
@@ -87,17 +106,8 @@ public class Player : Entity
 
     protected override void DestroyEntity()
     {
-        // To make sure there are no particles disappearing before destroying the GameObject
-        StartCoroutine(WaitForFX());
-        Destroy(gameObject);
-
-        // INVOKE GAME OVER EVENT !!!!!!!!!
-    }
-
-    private IEnumerator WaitForFX()
-    {
-        while (damagedFX.IsAlive()) yield return null;
-        yield break;
+        gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
 }
 

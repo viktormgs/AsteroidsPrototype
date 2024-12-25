@@ -6,7 +6,7 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager instance;
+    public static ScoreManager instance; // Review this !!!!!
     public Action OnIngameNewRecord;
 
     int currentScore = 0;
@@ -30,14 +30,9 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    void Awake()
-    {
-        if (instance == null) instance = this;
-        else if (instance != this) Destroy(gameObject);
-    }
-
     private void Start() 
     {
+        GameManagerEvents.OnStartPlay += ResetIngameScore;
         GameplayEvents.OnEnemyIsDestroyed += AddScore;
         GameplayEvents.OnEnemyIsDestroyed += CheckForNewRecord;
 
@@ -45,13 +40,20 @@ public class ScoreManager : MonoBehaviour
         PlayerPrefs.GetInt("Highest Score", newRecord);
     }
 
-    public void ResetIngameScore()
+    private void OnDestroy()
+    {
+        GameManagerEvents.OnStartPlay -= ResetIngameScore;
+        GameplayEvents.OnEnemyIsDestroyed -= AddScore;
+        GameplayEvents.OnEnemyIsDestroyed -= CheckForNewRecord;
+    }
+
+    private void ResetIngameScore()
     {
         UpdateScoreToUI(currentScore = 0);
         IsNewRecord = false;
     }
 
-    void AddScore() => UpdateScoreToUI(currentScore += addScore);
+    private void AddScore() => UpdateScoreToUI(currentScore += addScore);
 
 
     private void CheckForNewRecord()

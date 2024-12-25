@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class IngameNewRecordUI : MonoBehaviour
+public class NewRecordScreen : MonoBehaviour
 {
     TextMeshProUGUI textRecord;
     const float speed = 2f;
