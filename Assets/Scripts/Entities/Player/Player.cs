@@ -40,8 +40,9 @@ public class Player : Entity
         Initialize();
     }
 
-    private void Initialize()
+    protected override void Initialize()
     {
+        base.Initialize();
         ResetLives(playerStats.maxLives);
         movementSpeed = playerStats.movementSpeed;
         rotateSpeed = playerStats.rotateSpeed;

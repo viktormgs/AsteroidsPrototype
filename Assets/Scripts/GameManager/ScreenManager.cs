@@ -5,14 +5,14 @@ public class ScreenManager : MonoBehaviour
 {
     [SerializeField] private ScreensCollection screens;
 
-    private GameObject uIRoot;
-    private GameObject mainMenuScreen;
-    private GameObject gameOverScreen;
-    private GameObject pauseScreen;
+    private static GameObject uIRoot;
+    private static GameObject mainMenuScreen;
+    private static GameObject gameOverScreen;
+    private static GameObject pauseScreen;
 
-    private GameObject currentScreen = null;
+    private static GameObject currentScreen = null;
 
-    private GameObject CurrentScreen
+    private static GameObject CurrentScreen
     {
         get => currentScreen;
         set
@@ -63,6 +63,12 @@ public class ScreenManager : MonoBehaviour
     private void ExitCurrentScreen() => Hide(CurrentScreen);
 
 
+    public static bool CanPauseOrResumeGame()
+    {
+        if (CurrentScreen != null && CurrentScreen != pauseScreen) return false;
+        else return true;
+    }
+
     private void Show(GameObject screen)
     {
         if (CurrentScreen != null) Hide(CurrentScreen);
@@ -75,7 +81,6 @@ public class ScreenManager : MonoBehaviour
     {
         screen.SetActive(false);
         currentScreen = null;
-
     }
 
     private GameObject InstantiateScreen(GameObject screen)

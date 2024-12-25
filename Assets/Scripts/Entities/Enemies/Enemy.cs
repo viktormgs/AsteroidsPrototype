@@ -27,8 +27,9 @@ public class Enemy : Entity
         Initialize();
     }
 
-    private void Initialize()
+    protected override void Initialize()
     {
+        base.Initialize();
         float randomScale = Random.Range(minScale, maxScale);
         randomSpeed = Random.Range(minMovementSpeed, maxMovementSpeed);
         rotateSpeed = Random.Range(0, 500);
@@ -39,7 +40,12 @@ public class Enemy : Entity
 
         // The enemy spawner will set the direction and scale based on
         // the parent that was destroyed, that's why it stops at this point
-        if (isSplitEnemy == true) return;
+        if (isSplitEnemy == true) 
+        {
+            TryGetComponent(out SpriteRenderer sprite);
+            sprite.color = Color.red;
+            return;
+        }
 
         SetDirectionAndScale((Vector2.zero - (Vector2)transform.position).normalized, new Vector2(randomScale, randomScale));
     }

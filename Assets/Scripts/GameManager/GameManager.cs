@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //DontDestroyOnLoad(gameObject);
-
         GameManagerEvents.OnStartPlay += InitializeGameplay;
         GameManagerEvents.OnExitGame += QuitGame;
 

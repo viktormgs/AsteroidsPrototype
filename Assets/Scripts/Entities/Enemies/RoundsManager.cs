@@ -16,16 +16,23 @@ public class RoundsManager : MonoBehaviour
     {
         GameManagerEvents.OnStartPlay += ResetRounds;
         GameManagerEvents.OnStartPlay += Initialize;
+        GameManagerEvents.OnGameOver += StopRounds;
     }
 
     private void OnDestroy()
     {
         GameManagerEvents.OnStartPlay -= ResetRounds;
         GameManagerEvents.OnStartPlay -= Initialize;
-
+        GameManagerEvents.OnGameOver -= StopRounds;
     }
 
     private void Initialize() => roundTimer = StartCoroutine(RoundHandler());
+
+    private void StopRounds()
+    {
+        if (roundTimer != null) StopCoroutine(roundTimer);
+        roundTimer = null;
+    }
 
     private IEnumerator RoundHandler()
     {

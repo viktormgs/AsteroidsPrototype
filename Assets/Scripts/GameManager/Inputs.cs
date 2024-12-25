@@ -23,10 +23,12 @@ public class Inputs : MonoBehaviour
         get => pressedEscape;
         set
         {
-            if (pressedEscape == value) GameManagerEvents.InvokeOnPause();
-            else GameManagerEvents.InvokeOnResume();
-
             pressedEscape = value;
+
+            if(ScreenManager.CanPauseOrResumeGame() == false) return;
+
+            if (pressedEscape) GameManagerEvents.InvokeOnPause();
+            else GameManagerEvents.InvokeOnResume();
         }
     }
 

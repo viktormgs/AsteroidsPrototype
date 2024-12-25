@@ -25,6 +25,8 @@ public class EnemySpawner : MonoBehaviour
         GameplayEvents.OnEnemyToDestroy += Split;
         GameManagerEvents.OnStartPlay += Initialize;
         GameManagerEvents.OnExitGame += ResetSpawner;
+        GameManagerEvents.OnGameOver += ResetSpawner;
+
     }
 
     private void OnDestroy()
@@ -33,6 +35,8 @@ public class EnemySpawner : MonoBehaviour
         GameplayEvents.OnEnemyToDestroy = Split;
         GameManagerEvents.OnStartPlay -= Initialize;
         GameManagerEvents.OnExitGame -= ResetSpawner;
+        GameManagerEvents.OnGameOver -= ResetSpawner;
+
     }
 
     private void Initialize()

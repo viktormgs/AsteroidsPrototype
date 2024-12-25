@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,10 +26,20 @@ public abstract class Entity : MonoBehaviour
 
     protected virtual void Start()
     {
-        if (damagedFX.gameObject.activeSelf) damagedFX.gameObject.SetActive(false);
+        Initialize();
 
         // Rigidbody is required for this class, this ensures we don't have a missing serialized reference instead
         TryGetComponent(out rb); 
+    }
+
+    private void OnEnable()
+    {
+        Initialize();
+    }
+
+    protected virtual void Initialize()
+    {
+        if (damagedFX.gameObject.activeSelf) damagedFX.gameObject.SetActive(false);
     }
 
     protected virtual void FixedUpdate() => Movement();
@@ -44,11 +55,7 @@ public abstract class Entity : MonoBehaviour
     protected bool HasMoreLives()
     {
         if (CurrentLives > 0) return true;
-        else
-        {
-            CurrentLives = 0;
-            return false;
-        }
+        else return false;
     }
 
 
