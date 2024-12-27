@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
-    private int randomSpeed;
     private Vector2 directionToCenter;
     private Vector3 randomRotation;
 
@@ -31,7 +30,7 @@ public class Enemy : Entity
     {
         base.Initialize();
         float randomScale = Random.Range(minScale, maxScale);
-        randomSpeed = Random.Range(minMovementSpeed, maxMovementSpeed);
+        movementSpeed = Random.Range(minMovementSpeed, maxMovementSpeed);
         rotateSpeed = Random.Range(0, 500);
 
         // Allows the enemy to rotate one direction or the other
@@ -74,7 +73,7 @@ public class Enemy : Entity
         Rotation();
     }
 
-    protected override void Movement() => rb.velocity = randomSpeed * directionToCenter;
+    protected override void Movement() => rb.velocity = movementSpeed * directionToCenter;
     private void Rotation() => transform.Rotate(randomRotation, rotateSpeed * Time.deltaTime);
 
     public override void TakeDamage()

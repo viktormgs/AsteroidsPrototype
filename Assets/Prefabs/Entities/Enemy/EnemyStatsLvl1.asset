@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd291aa4253f51c4e91e25bd789f7b15, type: 3}
   m_Name: EnemyStatsLvl1
   m_EditorClassIdentifier: 
-  minMovementSpeed: 5
-  maxMovementSpeed: 10
-  minScale: 3
-  maxScale: 3.1
-  spawnInterval: 3
+  minMovementSpeed: 2
+  maxMovementSpeed: 5
+  minScale: 3.2
+  maxScale: 3.8
+  spawnInterval: 2.5
   maxLives: 1

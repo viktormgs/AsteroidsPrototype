@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d3ed3adf77757242b18d02553420fc5, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  movementSpeed: 20
+  movementSpeed: 25
   rotateSpeed: 250
-  maxAmmo: 5
+  maxAmmo: 4
   maxLives: 4
   projectileSpeed: 25
-  lifeTime: 3
+  lifeTime: 1.5
   shootingSpeed: 0.3

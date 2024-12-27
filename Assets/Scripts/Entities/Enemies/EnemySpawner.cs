@@ -12,13 +12,13 @@ public class EnemySpawner : MonoBehaviour
     private readonly List<GameObject> activeEnemyList = new();
 
     private float cameraHalfHeight;
-    private Vector2 screenLimit;
+    private Vector2 screenLimits = Vector2.zero;
     private Coroutine spawner = null;
 
     private void Start()
     {
         // Assigning these two here to keep the code more readable
-        screenLimit = ScreenBorders.ScreenSize; 
+        screenLimits = ScreenBorders.ScreenLimits; 
         cameraHalfHeight = ScreenBorders.CameraHalfHeight;
 
         GameplayEvents.OnEnemyToDestroy += DisableEnemy;
@@ -93,13 +93,13 @@ public class EnemySpawner : MonoBehaviour
         return side switch
         {
             // Top
-            0 => new Vector2(Random.Range(-screenLimit.x, screenLimit.x), cameraHalfHeight),
+            0 => new Vector2(Random.Range(-screenLimits.x, screenLimits.x), cameraHalfHeight),
             // Bottom
-            1 => new Vector2(Random.Range(-screenLimit.x, screenLimit.x), -cameraHalfHeight),
+            1 => new Vector2(Random.Range(-screenLimits.x, screenLimits.x), -cameraHalfHeight),
             // Left
-            2 => new Vector2(-screenLimit.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
+            2 => new Vector2(-screenLimits.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
             // Right
-            _ => new Vector2(screenLimit.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
+            _ => new Vector2(screenLimits.x, Random.Range(-cameraHalfHeight, cameraHalfHeight)),
         };
     }
 
@@ -123,7 +123,7 @@ public class EnemySpawner : MonoBehaviour
     private void Split(Enemy enemy)
     {
         // How big the enemy is will determine how many times will it be split
-        if (transform.localScale.x < minSizeForSplit) return;
+        if (enemy.transform.localScale.x < minSizeForSplit) return;
 
 
         int amountOfEnemies = Random.Range(2, 5); // Flexible number of enemy children (e.g., 2 to 5)
@@ -134,16 +134,22 @@ public class EnemySpawner : MonoBehaviour
             var smallEnemy = GetEnemy();
 
             // Child asteroids are half the size of the parent
-            smallEnemy.transform.localScale = enemy.gameObject.transform.localScale * .5f; 
-            smallEnemy.transform.position = enemy.gameObject.transform.position;
+            smallEnemy.transform.localScale = enemy.transform.localScale * .5f; 
+            smallEnemy.transform.position = enemy.transform.position;
 
             smallEnemy.TryGetComponent(out Enemy enemyState);
             enemyState.SetIsASplitEnemy();
 
             // Calculate direction for each enemy
             float angle = angleStep * i; // Angle for this enemy
-            Vector2 enemyDirection = RotateVector(Vector2.zero, angle);
-            enemyState.SetDirectionAndScale(enemyDirection, smallEnemy.transform.localScale);
+
+            // Assigning random values because this will create an offset on the angle of the direction,
+            // making it feel more natural, otherwise it will be a cross pattern every time it splits
+            angle = Random.Range(angle / 1.7f, angle * 1.7f); 
+
+
+            Vector2 enemyDirection = RotateVector(Vector2.up, angle);
+            enemyState.SetDirectionAndScale(enemyDirection, enemyState.transform.localScale);
         }
     }
 
