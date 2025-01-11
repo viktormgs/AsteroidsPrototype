@@ -16,3 +16,4 @@ MonoBehaviour:
   mainMenuScreen: {fileID: 392317217189595738, guid: 4e638436325cf174bbbc5aad8f2dd294, type: 3}
   gameOverScreen: {fileID: 392317217189595738, guid: 1b7a60b86ebb71e40abbd1119e81fe92, type: 3}
   pauseScreen: {fileID: 392317217189595738, guid: 96cbeca7faebd4b4ca42753c30591bfd, type: 3}
+  hud: {fileID: 5447452199493769848, guid: 7198f008c3d592b4687d5f39bd9a050d, type: 3}

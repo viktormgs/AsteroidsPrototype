@@ -15,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
     private Vector2 screenLimits = Vector2.zero;
     private Coroutine spawner = null;
 
+
     private void Start()
     {
         // Assigning these two here to keep the code more readable
@@ -78,6 +79,7 @@ public class EnemySpawner : MonoBehaviour
         GameObject pooledEnemy = enemyQueue.Dequeue();
        
         pooledEnemy.TryGetComponent(out Enemy enemy);
+
         AssignStats(enemy);
 
         pooledEnemy.SetActive(true);
@@ -115,9 +117,16 @@ public class EnemySpawner : MonoBehaviour
 
     private void DisableEnemy(Enemy enemy)
     {
-        enemy.gameObject.SetActive(false);
-        enemyQueue.Enqueue(enemy.gameObject);
-        activeEnemyList.Remove(enemy.gameObject);
+        StartCoroutine(CanBeDisabled());
+        IEnumerator CanBeDisabled()
+        {
+            while (enemy.FXPlaying != null) yield return null;
+
+            enemy.gameObject.SetActive(false);
+            enemyQueue.Enqueue(enemy.gameObject);
+            activeEnemyList.Remove(enemy.gameObject);
+            yield break;
+        }
     }
 
     private void Split(Enemy enemy)
@@ -126,19 +135,23 @@ public class EnemySpawner : MonoBehaviour
         if (enemy.transform.localScale.x < minSizeForSplit) return;
 
 
-        int amountOfEnemies = Random.Range(2, 5); // Flexible number of enemy children (e.g., 2 to 5)
+        int amountOfEnemies = Random.Range(2, 4); // Flexible number of enemy children (e.g., 2 to 4)
         float angleStep = 360f / amountOfEnemies; // Angle between split enemies
 
         for (int i = 0; i < amountOfEnemies; i++)
         {
             var smallEnemy = GetEnemy();
 
-            // Child asteroids are half the size of the parent
-            smallEnemy.transform.localScale = enemy.transform.localScale * .5f; 
-            smallEnemy.transform.position = enemy.transform.position;
-
             smallEnemy.TryGetComponent(out Enemy enemyState);
+
             enemyState.SetIsASplitEnemy();
+
+            // This forces initialization again to correctly setup child attributes
+            enemyState.gameObject.SetActive(false);
+            enemyState.gameObject.SetActive(true);
+
+
+            enemyState.SetPosition(enemy.transform.position);
 
             // Calculate direction for each enemy
             float angle = angleStep * i; // Angle for this enemy
@@ -147,9 +160,10 @@ public class EnemySpawner : MonoBehaviour
             // making it feel more natural, otherwise it will be a cross pattern every time it splits
             angle = Random.Range(angle / 1.7f, angle * 1.7f); 
 
-
             Vector2 enemyDirection = RotateVector(Vector2.up, angle);
-            enemyState.SetDirectionAndScale(enemyDirection, enemyState.transform.localScale);
+            enemyState.SetDirectionAndScale(enemyDirection, new Vector3(
+                // Child asteroids are half the size of the parent
+                enemy.transform.localScale.x * .5f, enemy.transform.localScale.y * .5f, 1));
         }
     }
 
@@ -168,6 +182,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void ResetSpawner()
     {
+        StopCoroutine(spawner);
         foreach (GameObject activeEnemy in activeEnemyList)
         {
                 activeEnemy.SetActive(false);

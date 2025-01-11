@@ -15,7 +15,7 @@ MonoBehaviour:
   movementSpeed: 25
   rotateSpeed: 250
   maxAmmo: 4
-  maxLives: 4
-  projectileSpeed: 25
-  lifeTime: 1.5
+  maxLives: 3
+  projectileSpeed: 22
+  lifeTime: 1
   shootingSpeed: 0.3

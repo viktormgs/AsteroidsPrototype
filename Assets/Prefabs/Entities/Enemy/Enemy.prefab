@@ -100,10 +100,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49f55d3c0945b54298aec9beffe2619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 6609197317097569289}
+  materialRenderer: {fileID: 7540776510579764491}
   damagedFX: {fileID: 5911083797448281860}
-  minSizeForSplit: 3.2
-  isSplitEnemy: 0
-  destroyFX: {fileID: 4271236955858564455, guid: 1f1e7404f5e13344fadbad1cdce40c5f, type: 3}
+  boxCollider: {fileID: 8657272184608112875}
 --- !u!50 &6609197317097569289
 Rigidbody2D:
   serializedVersion: 4
@@ -129,7 +129,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &8657272184608112875
 BoxCollider2D:

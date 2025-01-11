@@ -43,10 +43,10 @@ public class ScreenBorders : MonoBehaviour
         GameObject borderBottom = CreateBorder("Border_Bottom");
 
         // Place boundary walls at appropriate positions base on device screen size
-        PlaceBorder(borderLeft, new Vector2(-borderPos.x, 0), new Vector2(boundaryWidth, ScreenSize.y * scaleOffset));
-        PlaceBorder(borderRight, new Vector2(borderPos.x, 0), new Vector2(boundaryWidth, ScreenSize.y * scaleOffset));
-        PlaceBorder(borderTop, new Vector2(0, borderPos.y), new Vector2(ScreenSize.x * scaleOffset, boundaryWidth));
-        PlaceBorder(borderBottom, new Vector2(0, -borderPos.y), new Vector2(ScreenSize.x * scaleOffset, boundaryWidth));
+        PlaceBorder(borderLeft, new Vector2(-borderPos.x, 0), new Vector3(boundaryWidth, ScreenSize.y * scaleOffset, 1));
+        PlaceBorder(borderRight, new Vector2(borderPos.x, 0), new Vector3(boundaryWidth, ScreenSize.y * scaleOffset, 1));
+        PlaceBorder(borderTop, new Vector2(0, borderPos.y), new Vector3(ScreenSize.x * scaleOffset, boundaryWidth, 1));
+        PlaceBorder(borderBottom, new Vector2(0, -borderPos.y), new Vector3(ScreenSize.x * scaleOffset, boundaryWidth, 1));
     }
 
     private GameObject CreateBorder(string name)
@@ -60,7 +60,7 @@ public class ScreenBorders : MonoBehaviour
         return boundary;
     }
 
-    private void PlaceBorder(GameObject wall, Vector2 position, Vector2 scale)
+    private void PlaceBorder(GameObject wall, Vector2 position, Vector3 scale)
     {
         wall.transform.position = position;
         wall.transform.localScale = scale;

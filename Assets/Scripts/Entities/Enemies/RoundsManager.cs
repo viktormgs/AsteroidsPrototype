@@ -28,12 +28,6 @@ public class RoundsManager : MonoBehaviour
 
     private void Initialize() => roundTimer = StartCoroutine(RoundHandler());
 
-    private void StopRounds()
-    {
-        if (roundTimer != null) StopCoroutine(roundTimer);
-        roundTimer = null;
-    }
-
     private IEnumerator RoundHandler()
     {
         int enemyLevel = 0;
@@ -46,6 +40,11 @@ public class RoundsManager : MonoBehaviour
             Debug.Log("Round " + enemyLevel.ToString() + " starts now");
         }
         yield break;
+    }
+
+    private void StopRounds()
+    {
+        if (roundTimer != null) StopCoroutine(roundTimer);
     }
 
     private void ResetRounds()

@@ -100,6 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d620b6a9413ceb4eb95b6bcf1279a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 969051228007516248}
+  materialRenderer: {fileID: 969051228007516251}
   damagedFX: {fileID: 3885476974993767980}
   playerStats: {fileID: 11400000, guid: d25956a1293e81645a4309fcf966e179, type: 2}
   projectile: {fileID: 4589747541396666435, guid: b6e89177b6fd90c46bafe8a37d92a19d, type: 3}

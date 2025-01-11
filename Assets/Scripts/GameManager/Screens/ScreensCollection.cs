@@ -7,4 +7,5 @@ public class ScreensCollection : ScriptableObject
     public GameObject mainMenuScreen;
     public GameObject gameOverScreen;
     public GameObject pauseScreen;
+    public GameObject hud;
 }

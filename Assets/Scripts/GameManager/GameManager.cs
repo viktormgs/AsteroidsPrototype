@@ -6,7 +6,7 @@ using System;
 // Add Logic between is on menu vs is playing for buttons
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Player playerObject; 
+    [SerializeField] private Player player;
     public static Player Player { get; private set; } = null;
 
     private void Start()
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     private void InitializeGameplay()
     {
-        if (Player == null) Player = Instantiate(playerObject);
+        if (Player == null) Player = Instantiate(player);
         if(!Player.gameObject.activeSelf) Player.gameObject.SetActive(true);
     }
 

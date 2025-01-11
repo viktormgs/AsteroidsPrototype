@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class Enemy : Entity
 {
+    [SerializeField] private BoxCollider2D boxCollider;
+
     private Vector2 directionToCenter;
-    private Vector3 randomRotation;
+    private float randomRotation;
 
     private int minMovementSpeed;
     private int maxMovementSpeed;
@@ -15,38 +18,30 @@ public class Enemy : Entity
     private bool isSplitEnemy;
 
 
-    protected override void Start()
-    {
-        base.Start();
-        Initialize();
-    }
-
-    private void OnEnable()
-    {
-        Initialize();
-    }
-
     protected override void Initialize()
     {
         base.Initialize();
         float randomScale = Random.Range(minScale, maxScale);
         movementSpeed = Random.Range(minMovementSpeed, maxMovementSpeed);
         rotateSpeed = Random.Range(0, 500);
+        boxCollider.enabled = true;
+        TryGetComponent(out SpriteRenderer sprite);
 
         // Allows the enemy to rotate one direction or the other
-        int randomOrientation = Random.Range(0, 1) * 2 - 1;
-        randomRotation = new Vector3(0, 0, randomOrientation);
+        randomRotation = Random.Range(0, 1) * 2 - 1;
 
         // The enemy spawner will set the direction and scale based on
         // the parent that was destroyed, that's why it stops at this point
         if (isSplitEnemy == true) 
         {
-            TryGetComponent(out SpriteRenderer sprite);
             sprite.color = Color.red;
             return;
         }
 
-        SetDirectionAndScale((Vector2.zero - (Vector2)transform.position).normalized, new Vector2(randomScale, randomScale));
+        sprite.color = Color.white;
+
+        SetDirectionAndScale((Vector2.zero - (Vector2)transform.position).normalized, 
+            new Vector3(randomScale, randomScale, 1));
     }
 
 
@@ -59,22 +54,40 @@ public class Enemy : Entity
         this.maxScale = maxScale;
         ResetLives(maxLives);
     }
-    
+
+    public void SetPosition(Vector3 position) => rb.position = position;
+
+    public void ResetVelocity() => rb.velocity = Vector2.zero;
+
+    public void ResetCollider()
+    {
+        boxCollider.enabled = false;
+        boxCollider.enabled = true;
+    }
+
     public void SetIsASplitEnemy() => isSplitEnemy = true;
-    public void SetDirectionAndScale(Vector2 direction, Vector2 scale)
+    public void SetDirectionAndScale(Vector2 direction, Vector3 scale)
     {
         directionToCenter = direction;
-        transform.localScale = scale;
+        rb.transform.localScale = scale;
     }
 
-    protected override void FixedUpdate()
+    protected override void Movement()
     {
-        base.FixedUpdate();
-        Rotation();
+        if (!CanMove)
+        {
+            rb.position = gameObject.transform.position;
+            return;
+        }
+
+        rb.velocity = movementSpeed * Time.fixedDeltaTime * directionToCenter;
+        Rotation(); // Called from here to avoid rotation if cannot move, local particles will not rotate which is intended
     }
 
-    protected override void Movement() => rb.velocity = movementSpeed * directionToCenter;
-    private void Rotation() => transform.Rotate(randomRotation, rotateSpeed * Time.deltaTime);
+    private void Rotation()
+    {
+        rb.SetRotation((rotateSpeed * Time.fixedDeltaTime) * randomRotation);
+    }
 
     public override void TakeDamage()
     {
@@ -86,8 +99,22 @@ public class Enemy : Entity
 
     protected override void DestroyEntity()
     {
-        isSplitEnemy = false;
-        GameplayEvents.InvokeEnemyToDestroy(this);
-        GameplayEvents.InvokeEnemyIsDestroyed();
+        StartCoroutine(WaitBeforeDestroying());
+        IEnumerator WaitBeforeDestroying()
+        {
+            isSplitEnemy = false;
+            
+            materialRenderer.enabled = false;
+            boxCollider.enabled = false;
+            DisableMovement();
+
+            GameplayEvents.InvokeEnemyToDestroy(this); // This enqueues the current enemy and creates enemy children if possible
+
+            while (FXPlaying != null) yield return null;
+            
+            GameplayEvents.InvokeEnemyIsDestroyed();
+
+            yield break;
+        }
     }
 }

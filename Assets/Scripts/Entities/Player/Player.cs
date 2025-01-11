@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,6 @@ public class Player : Entity
         }
     }
 
-    private Renderer materialRenderer;
     private readonly int invincibilityLifetime = 4;
     private const int playerLayer = 7;
     private const int enemyLayer = 9;
@@ -31,25 +31,32 @@ public class Player : Entity
         GameplayEvents.OnPlayerIsDamaged += TakeDamage;
         GameManagerEvents.OnGameOver += DestroyEntity;
 
-        TryGetComponent(out materialRenderer); // Needed for visual flickering
-
         // Added the component like this because all relevant data comes from PlayerStats,
         // also, cleaner in the Inspector because there are no fields to expose from PlayerShoot Class.
         playerShoot = gameObject.AddComponent<PlayerShoot>(); 
-        playerShoot.Initialize(playerStats.projectileSpeed, playerStats.lifeTime, playerStats.shootingSpeed, projectile);
-        Initialize();
+        playerShoot.Initialize(playerStats.projectileSpeed, playerStats.lifeTime, playerStats.shootingSpeed, playerStats.maxAmmo, projectile);
     }
 
     protected override void Initialize()
     {
         base.Initialize();
+
         ResetLives(playerStats.maxLives);
         movementSpeed = playerStats.movementSpeed;
         rotateSpeed = playerStats.rotateSpeed;
+        ResetPosition();
     }
+
+    private void ResetPosition() => transform.SetPositionAndRotation(Vector2.zero, Quaternion.identity);
 
     protected override void Movement()
     {
+        if (!CanMove)
+        {
+            gameObject.transform.position = gameObject.transform.position;
+            return;
+        }
+
         var playerDirection = new Vector2(Inputs.HorizontalInput, Inputs.VerticalInput);
         rb.AddForce(movementSpeed * playerDirection); // AddForce gives a more realistic feeling when moving
 
@@ -63,9 +70,8 @@ public class Player : Entity
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out Enemy enemy))
+        if (other.TryGetComponent<Enemy>(out _))
         {
-            enemy.TakeDamage();
             GameplayEvents.InvokePlayerIsDamaged();
         }
     }
@@ -80,35 +86,39 @@ public class Player : Entity
 
     private IEnumerator Respawn()
     {
-        float flickerRate = .4f; // For Player visual flickering effect
+        float flickerRate = .2f; // For Player visual flickering effect
         materialRenderer.enabled = false;
 
-        // Gives a bit of time so the player doesn't instantly respawn
-        while (fXPlaying != null) yield return null; 
+        // Used this than disabling collider because screen wrapping depends on collisions
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer);
 
-        transform.position = Vector2.zero;
+        DisableMovement();
+
+        // Because particles are a child of the Player and need to finish before resetting position
+        // Also, gives a bit of time so the player doesn't instantly respawn
+        while (FXPlaying != null) yield return null;
+
+        ResetPosition();
+        EnableMovement();
 
         for (int i = 0; i < invincibilityLifetime; i++)
-        {
-            // Used this than disabling collider because screen wrapping depends on collisions
-            Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer); 
-            
+        {            
+            materialRenderer.enabled = true;
             yield return new WaitForSeconds(flickerRate);
             materialRenderer.enabled = false;
             yield return new WaitForSeconds(flickerRate);
-            materialRenderer.enabled = true;
 
-            flickerRate /= 1.5f; // The flickering happens faster after each iteration, no need to change so magic number
+
+            // The flickering happens faster after each iteration, no need to change so magic number
+            flickerRate /= 1.2f; 
         }
+
+        materialRenderer.enabled = true;
 
         Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
         yield break;
     }
 
-    protected override void DestroyEntity()
-    {
-        gameObject.SetActive(false);
-        //Destroy(gameObject);
-    }
+    protected override void DestroyEntity() => gameObject.SetActive(false);
 }
 

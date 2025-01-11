@@ -18,37 +18,43 @@ public class PlayerShoot : MonoBehaviour
     private float shootingSpeed;
 
     private bool canShoot = true;
-    private const int maxAmountOfProjectiles = 7; // Assuming the average amount of max projectiles on screen
-    private readonly Queue<GameObject> projectilePool = new();
+    private int maxAmmo;
+    private readonly Queue<GameObject> projectileQueue = new();
+    private readonly List<GameObject> activeProjectiles = new();
 
-    public void Initialize(float projectileSpeed, float lifeTime, float shootingSpeed, GameObject projectile)
+    public void Initialize(float projectileSpeed, float lifeTime, float shootingSpeed, int maxAmmo, GameObject projectile)
     {
         this.projectileSpeed = projectileSpeed;
         this.lifeTime = lifeTime;
         this.shootingSpeed = shootingSpeed;
         this.projectile = projectile;
+        this.maxAmmo = maxAmmo;
 
-        projectileGroup = new("Projectiles");
+        if (projectileGroup == null) projectileGroup = new("Projectiles");
         SetupProjectiles();
+        GameplayEvents.OnPlayerShoot += Shoot;
+        GameManagerEvents.OnGameOver += Clearprojectiles;
+    }
+
+    private void OnEnable()
+    {
+        GameplayEvents.OnPlayerShoot += Shoot;
+        canShoot = true;
+    }
+
+    private void OnDisable()
+    {
+        canShoot = false;
+        GameplayEvents.OnPlayerShoot -= Shoot;
     }
 
     private void SetupProjectiles()
     {
-        GameplayEvents.OnPlayerShoot += Shoot;
-
         if (projectileGroup == null) projectileGroup = Instantiate(projectileGroup);
-        
-        CreateProjectilePool();
 
-    }
-
-    private void CreateProjectilePool() // To easily re-use instantiated projectiles
-    {
-        for (int i = 0; i < maxAmountOfProjectiles; i++)
+        for (int i = 0; i < maxAmmo; i++) // To easily re-use instantiated projectiles
         {
-            var newProjectile = CreateProjectile();
-
-            projectilePool.Enqueue(newProjectile);
+            projectileQueue.Enqueue(CreateProjectile());
         }
     }
 
@@ -62,18 +68,20 @@ public class PlayerShoot : MonoBehaviour
     private GameObject GetProjectile()
     {
         // Creates a projectile if there are no available projectiles in the pool
-        if (projectilePool.Count == 0) 
+        if (projectileQueue.Count == 0) 
         {
-            var newProjectile = CreateProjectile();
-            projectilePool.Enqueue(newProjectile);
+            GameObject newProjectile = CreateProjectile();
+            projectileQueue.Enqueue(newProjectile);
             return newProjectile;
         }
 
-        GameObject pooledProjectile = projectilePool.Dequeue();
-        pooledProjectile.TryGetComponent(out rb); // Need this because it uses physics (velocity) to move
-        pooledProjectile.SetActive(true);
+        GameObject activeProjectile = projectileQueue.Dequeue();
+        activeProjectile.TryGetComponent(out rb); // Need this because it uses physics (velocity) to move
+        activeProjectile.SetActive(true);
 
-        return pooledProjectile;
+        activeProjectiles.Add(activeProjectile); // To keep track of active projectiles on screen
+
+        return activeProjectile;
     }
 
     private void Shoot()
@@ -88,13 +96,12 @@ public class PlayerShoot : MonoBehaviour
                 (gameObject.transform.position.x, gameObject.transform.position.y, 
                 gameObject.transform.position.z + 1), gameObject.transform.rotation); 
 
-            rb.velocity = projectileSpeed * transform.up; //Projectile Movement
+            rb.velocity = projectileSpeed * transform.up;
 
-            // Call Projectile lifetime
             StartCoroutine(ProjectileLifetime(projectileInUse));
         }
 
-        // Coroutines embedded into the method because they are not supposed to be called from anywhere else.
+        // Coroutines embedded into this method because they are not supposed to be called from anywhere else.
         IEnumerator ProjectileLifetime(GameObject inUseProjectile)
         {
             yield return new WaitForSeconds(lifeTime);
@@ -114,7 +121,18 @@ public class PlayerShoot : MonoBehaviour
 
     private void DisableProjectile(GameObject projectileInUse)
     {
+        activeProjectiles.Remove(projectileInUse);
+
         projectileInUse.SetActive(false);
-        projectilePool.Enqueue(projectileInUse);
+        projectileQueue.Enqueue(projectileInUse);
+    }
+
+    private void Clearprojectiles()
+    {
+        foreach (GameObject projectile in activeProjectiles)
+        {
+            DisableProjectile(projectile);
+        }
+        projectileQueue.Clear();
     }
 }

@@ -9,10 +9,13 @@ public abstract class Entity : MonoBehaviour
     private int currentLives;
     protected float movementSpeed;
     protected float rotateSpeed;
+
+    protected bool CanMove = true;
     
-    protected Rigidbody2D rb;
+    [SerializeField] protected Rigidbody2D rb;
+    [SerializeField] protected Renderer materialRenderer;
     [SerializeField] protected ParticleSystem damagedFX;
-    protected Coroutine fXPlaying;
+    public Coroutine FXPlaying { get; private set; }
 
     public virtual int CurrentLives 
     { 
@@ -26,29 +29,30 @@ public abstract class Entity : MonoBehaviour
 
     protected virtual void Start()
     {
-        Initialize();
+        TryGetComponent(out materialRenderer);
 
-        // Rigidbody is required for this class, this ensures we don't have a missing serialized reference instead
-        TryGetComponent(out rb); 
-    }
-
-    private void OnEnable()
-    {
         Initialize();
     }
+
+    private void OnEnable() => Initialize();
 
     protected virtual void Initialize()
     {
         if (damagedFX.gameObject.activeSelf) damagedFX.gameObject.SetActive(false);
+
+        if(materialRenderer.enabled == false) materialRenderer.enabled = true;
+        EnableMovement();
     }
 
-    protected virtual void FixedUpdate() => Movement();
+    private void FixedUpdate() => Movement();
     protected abstract void Movement();
 
+    protected void EnableMovement() => CanMove = true;
+    protected void DisableMovement() => CanMove = false; 
 
     public virtual void TakeDamage()
     {
-        CurrentLives--;
+        CurrentLives--;      
         PlayDamagedFX();
     }
 
@@ -61,21 +65,21 @@ public abstract class Entity : MonoBehaviour
 
     protected void PlayDamagedFX()
     {
-        if (!damagedFX.gameObject.activeSelf) damagedFX.gameObject.SetActive(false);
-        damagedFX.gameObject.SetActive(true);
+        if (!damagedFX.gameObject.activeSelf) damagedFX.gameObject.SetActive(true);
+        damagedFX.Play();
 
-        fXPlaying = StartCoroutine(WaitForFX());
+        FXPlaying = StartCoroutine(WaitForFX());
         IEnumerator WaitForFX() // To make sure there are no particles disappearing before destroying the GameObject
         {
-            while (damagedFX.IsAlive()) yield return null;
+            while (damagedFX.isPlaying) yield return null;
+
+            Debug.Log($"FX IS ALIVE! FOR {gameObject.name}");
             damagedFX.gameObject.SetActive(false);
-            yield break;
+            FXPlaying = null;
         }
-        fXPlaying = null;
     }
 
     protected void ResetLives(int maxLives) => CurrentLives = maxLives;
 
     protected abstract void DestroyEntity();
-
 }
