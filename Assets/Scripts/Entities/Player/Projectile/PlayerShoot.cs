@@ -33,7 +33,7 @@ public class PlayerShoot : MonoBehaviour
         if (projectileGroup == null) projectileGroup = new("Projectiles");
         SetupProjectiles();
         GameplayEvents.OnPlayerShoot += Shoot;
-        GameManagerEvents.OnGameOver += Clearprojectiles;
+        GameManagerEvents.OnGameOver += ClearProjectiles;
     }
 
     private void OnEnable()
@@ -127,12 +127,14 @@ public class PlayerShoot : MonoBehaviour
         projectileQueue.Enqueue(projectileInUse);
     }
 
-    private void Clearprojectiles()
+    private void ClearProjectiles()
     {
         foreach (GameObject projectile in activeProjectiles)
         {
-            DisableProjectile(projectile);
+            projectile.SetActive(false);
+            projectileQueue.Enqueue(projectile);
         }
-        projectileQueue.Clear();
+
+        activeProjectiles.Clear();
     }
 }

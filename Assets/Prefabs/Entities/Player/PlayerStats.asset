@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
   movementSpeed: 25
-  rotateSpeed: 250
+  rotateSpeed: 280
   maxAmmo: 4
   maxLives: 3
   projectileSpeed: 22
-  lifeTime: 1
+  lifeTime: 0.5
   shootingSpeed: 0.3

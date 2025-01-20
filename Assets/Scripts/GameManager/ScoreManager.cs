@@ -6,79 +6,57 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager instance; // Review this !!!!!
-    public Action OnIngameNewRecord;
+    [SerializeField] private TextMeshProUGUI textScore;
 
-    int currentScore = 0;
-    const int addScore = 1;
-    int newRecord;
-    public TextMeshProUGUI textScore;
-    bool isNewRecord;
+    private int currentScore = 0;
+    private const int addScore = 1;
 
-
-    // Encapsulation to call once for new record during game, should reset after game over
-    bool IsNewRecord
-    {
-        get { return isNewRecord; }
-        set
-        {
-            if (value == true)
-            {
-                isNewRecord = value;
-                OnIngameNewRecord?.Invoke();
-            }
-        }
-    }
+    public static int HighestRecord { get; private set; } = 0;
 
     private void Start() 
     {
-        GameManagerEvents.OnStartPlay += ResetIngameScore;
+        GameManagerEvents.OnStartPlay += ResetCurrentScore;
         GameplayEvents.OnEnemyIsDestroyed += AddScore;
         GameplayEvents.OnEnemyIsDestroyed += CheckForNewRecord;
+        GameManagerEvents.OnGameOver += CheckForNewRecord;
 
-        ResetIngameScore();
-        PlayerPrefs.GetInt("Highest Score", newRecord);
+
+        LoadRecordScore();
+        ResetCurrentScore();
     }
 
     private void OnDestroy()
     {
-        GameManagerEvents.OnStartPlay -= ResetIngameScore;
+        GameManagerEvents.OnStartPlay -= ResetCurrentScore;
         GameplayEvents.OnEnemyIsDestroyed -= AddScore;
         GameplayEvents.OnEnemyIsDestroyed -= CheckForNewRecord;
+        GameManagerEvents.OnGameOver -= CheckForNewRecord;
     }
 
-    private void ResetIngameScore()
+    private void LoadRecordScore()
+    {
+        PlayerPrefs.GetInt("Highest Score", HighestRecord);
+    }
+
+    private void ResetCurrentScore()
     {
         UpdateScoreToUI(currentScore = 0);
-        IsNewRecord = false;
     }
 
     private void AddScore() => UpdateScoreToUI(currentScore += addScore);
 
+    private void UpdateScoreToUI(int currentScore)
+    {
+        Debug.Log($"Current Score: {currentScore}");
+        textScore.text = currentScore.ToString("000");
+    }
 
     private void CheckForNewRecord()
     {
-        if (currentScore > newRecord)
-        {
-            newRecord = currentScore;
-            PlayerPrefs.SetInt("Highest Score",newRecord);
-            PlayerPrefs.Save();
-            if(!isNewRecord) IsNewRecord = true;
-        }
-    } 
+        if (currentScore < HighestRecord) return;
 
-    public int DisplayNewRecordOnMainMenu()
-    {
-        return newRecord;
-    }
-
-    void UpdateScoreToUI(int currentScore) => textScore.text = currentScore.ToString("000");
-
-    public void DebugRecordScore()
-    {
-        Debug.Log("Current High Record: " + newRecord.ToString());
-
-
-
+        HighestRecord = currentScore;
+        PlayerPrefs.SetInt("Highest Score", HighestRecord);
+        PlayerPrefs.Save();
     }
 }

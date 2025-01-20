@@ -5,32 +5,38 @@ using TMPro;
 
 public class NewRecordScreen : MonoBehaviour
 {
-    TextMeshProUGUI textRecord;
-    const float speed = 2f;
+    [SerializeField] private TextMeshProUGUI recordText;
+    private const float fadeSpeed = 2f;
 
-    void Start()
+    private void Start()
     {
-        ScoreManager.instance.OnIngameNewRecord += ShowNewRecordText;
-
-        textRecord = GetComponent<TextMeshProUGUI>();
-
-        if (textRecord.alpha == 1) textRecord.alpha = 0;
+        GameplayEvents.OnNewRecord += ShowNewRecordText;
+        if (recordText.alpha == 1) recordText.alpha = 0;
     }
 
-    void ShowNewRecordText() {
+    private void OnDestroy()
+    {
+        GameplayEvents.OnNewRecord -= ShowNewRecordText;
+    }
+
+    private void ShowNewRecordText()
+    {
         StartCoroutine(MakeVisible());
         IEnumerator MakeVisible()
         {
-            textRecord.alpha = 1;
+            recordText.alpha = 1;
             yield return new WaitForSeconds(2.5f);
 
-            while (textRecord.alpha > 0f) textRecord.alpha -= speed * Time.deltaTime;
+            while (recordText.alpha > 0f)
+            {
+                recordText.alpha -= fadeSpeed * Time.deltaTime;
+            }
 
-            textRecord.alpha = 0;
+            recordText.alpha = 0;
             yield break;
         }
     }
 
-    
+
 
 }

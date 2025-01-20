@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +13,7 @@ public class MainMenuScreen : MonoBehaviour
     {
         playButton.onClick.AddListener(Play);
         exitGameButton.onClick.AddListener(ExitGame);
+
     }
 
     private void Play()
@@ -23,4 +26,5 @@ public class MainMenuScreen : MonoBehaviour
     {
         GameManagerEvents.InvokeOnExitGame();
     }
+
 }

@@ -9,16 +9,6 @@ public class Player : Entity
     [SerializeField] private GameObject projectile;
     private PlayerShoot playerShoot;
 
-    public override int CurrentLives
-    {
-        get => base.CurrentLives;
-        protected set
-        {
-            base.CurrentLives = value;
-            // Do something to send to life manager ????
-        }
-    }
-
     private readonly int invincibilityLifetime = 4;
     private const int playerLayer = 7;
     private const int enemyLayer = 9;

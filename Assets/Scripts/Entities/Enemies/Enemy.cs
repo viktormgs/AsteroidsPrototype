@@ -99,22 +99,15 @@ public class Enemy : Entity
 
     protected override void DestroyEntity()
     {
-        StartCoroutine(WaitBeforeDestroying());
-        IEnumerator WaitBeforeDestroying()
-        {
-            isSplitEnemy = false;
-            
-            materialRenderer.enabled = false;
-            boxCollider.enabled = false;
-            DisableMovement();
+        isSplitEnemy = false;
 
-            GameplayEvents.InvokeEnemyToDestroy(this); // This enqueues the current enemy and creates enemy children if possible
+        materialRenderer.enabled = false;
+        boxCollider.enabled = false;
+        DisableMovement();
 
-            while (FXPlaying != null) yield return null;
-            
-            GameplayEvents.InvokeEnemyIsDestroyed();
+        // This enqueues the current enemy and creates enemy children if possible
+        GameplayEvents.InvokeEnemyToDestroy(this);
 
-            yield break;
-        }
+        GameplayEvents.InvokeEnemyIsDestroyed();
     }
 }

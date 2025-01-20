@@ -17,10 +17,10 @@ public abstract class Entity : MonoBehaviour
     [SerializeField] protected ParticleSystem damagedFX;
     public Coroutine FXPlaying { get; private set; }
 
-    public virtual int CurrentLives 
+    public int CurrentLives 
     { 
         get => currentLives; 
-        protected set
+        private set
         {
             if(value < 0) value = 0;
             currentLives = value;
@@ -73,7 +73,6 @@ public abstract class Entity : MonoBehaviour
         {
             while (damagedFX.isPlaying) yield return null;
 
-            Debug.Log($"FX IS ALIVE! FOR {gameObject.name}");
             damagedFX.gameObject.SetActive(false);
             FXPlaying = null;
         }
