@@ -7,11 +7,10 @@ public class HighestRecordUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI highestRecord;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         GameManagerEvents.OnGameOver += UpdateNewRecord;
+        UpdateNewRecord();
     }
 
     private void OnDestroy()

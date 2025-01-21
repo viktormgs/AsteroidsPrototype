@@ -13,7 +13,6 @@ public class MainMenuScreen : MonoBehaviour
     {
         playButton.onClick.AddListener(Play);
         exitGameButton.onClick.AddListener(ExitGame);
-
     }
 
     private void Play()

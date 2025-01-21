@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class NewRecordScreen : MonoBehaviour
+public class NewRecordTextDisplay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI recordText;
-    private const float fadeSpeed = 2f;
+    private const float fadeSpeed = .7f;
 
     private void Start()
     {

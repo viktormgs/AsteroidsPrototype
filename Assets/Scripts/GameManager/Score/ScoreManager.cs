@@ -10,8 +10,14 @@ public class ScoreManager : MonoBehaviour
 
     private int currentScore = 0;
     private const int addScore = 1;
+    private const string  savedScore = "Highest Score";
 
     public static int HighestRecord { get; private set; } = 0;
+
+    private void Awake()
+    {
+        LoadRecordScore();
+    }
 
     private void Start() 
     {
@@ -21,7 +27,6 @@ public class ScoreManager : MonoBehaviour
         GameManagerEvents.OnGameOver += CheckForNewRecord;
 
 
-        LoadRecordScore();
         ResetCurrentScore();
     }
 
@@ -35,7 +40,7 @@ public class ScoreManager : MonoBehaviour
 
     private void LoadRecordScore()
     {
-        PlayerPrefs.GetInt("Highest Score", HighestRecord);
+        HighestRecord = PlayerPrefs.GetInt(savedScore);
     }
 
     private void ResetCurrentScore()
@@ -47,7 +52,6 @@ public class ScoreManager : MonoBehaviour
 
     private void UpdateScoreToUI(int currentScore)
     {
-        Debug.Log($"Current Score: {currentScore}");
         textScore.text = currentScore.ToString("000");
     }
 
@@ -56,7 +60,9 @@ public class ScoreManager : MonoBehaviour
         if (currentScore < HighestRecord) return;
 
         HighestRecord = currentScore;
-        PlayerPrefs.SetInt("Highest Score", HighestRecord);
+        PlayerPrefs.SetInt(savedScore, HighestRecord);
         PlayerPrefs.Save();
+
+        GameplayEvents.InvokeNewRecord();
     }
 }
